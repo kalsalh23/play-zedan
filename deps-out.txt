@@ -1,0 +1,10 @@
+dpl_DEL84fnVer4S2pSheemYK54FN3f1 | READY | undefined | play-zedan-a00j3t1vl-kalsalh23s-projects.vercel.app | MOBILY BRO+ deploy: .env.example
+dpl_FQvyRN39on2Eq4wqRx8thPJEfP1N | READY | undefined | play-zedan-aqguuvmma-kalsalh23s-projects.vercel.app | MOBILY BRO+ deploy: src/components/ProductCard.jsx
+dpl_6zNsaGU2Jnm8SdTunoEojbyDBBJX | CANCELED | undefined | play-zedan-dwltdvry7-kalsalh23s-projects.vercel.app | MOBILY BRO+ deploy: src/components/Layout.jsx
+dpl_28FkBehqcaCfwpgsDR5Fh4fxrQkV | CANCELED | undefined | play-zedan-2apnkp7ns-kalsalh23s-projects.vercel.app | MOBILY BRO+ deploy: src/components/CategoryIcon.jsx
+dpl_ECvHwD4ywTBuvh8dyTK8q2mP3nGa | CANCELED | undefined | play-zedan-6mrj82l9d-kalsalh23s-projects.vercel.app | MOBILY BRO+ deploy: src/App.jsx
+dpl_GkuNvNPmAhQvneETmMVHig3H5mos | CANCELED | undefined | play-zedan-7mbwrcmir-kalsalh23s-projects.vercel.app | MOBILY BRO+ deploy: scripts/sync-real-catalog.mjs
+dpl_5jrmWBmbhUExvp8TJuH7F7weyR5K | CANCELED | undefined | play-zedan-fe89xxobh-kalsalh23s-projects.vercel.app | MOBILY BRO+ deploy: scripts/push-github.mjs
+dpl_Fu5hDLcLkxX57emE1kQvD1gaNAfq | CANCELED | undefined | play-zedan-82ra30fh2-kalsalh23s-projects.vercel.app | MOBILY BRO+ deploy: scripts/make-icons.mjs
+dpl_C9kfrZsdaCz6U5aDqLopbtDauzRu | READY | undefined | play-zedan-qbtua3jmv-kalsalh23s-projects.vercel.app | MOBILY BRO+ deploy: scripts/link-git.mjs
+dpl_AMyvAns59DWN18Wtc9vAres5tf3t | CANCELED | undefined | play-zedan-qy5g4zb2s-kalsalh23s-projects.vercel.app | MOBILY BRO+ deploy: scripts/deploy-vercel.mjs
