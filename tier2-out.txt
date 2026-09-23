@@ -1,0 +1,8 @@
+email field -> 404 {"status":"error","code":404,"msg":"\u062e\u0637\u0623 \u0641\u064a \u0627\u0644\u0637\u0644\u0628","data":"\u062a\u0623\u0643\u06
+username field -> 200 TOKEN OK
+TOKEN: OK
+profile: {"name":"Kosai Alsalh","email":"kosaialsalh1@gmail.com","username":"kosaialsalh","group":"VIP مفرق","balance":0}
+products: 752 | priced: 752
+sell prices patched: 752
+credentials saved: 200
+samples: ["YUMI CHAT | $0.000024283275 -> 100 SYP","SHAGHAF | $0.00010629929411764706 -> 100 SYP","GUGUK | $0.0001299435294117647 -> 100 SYP"]
