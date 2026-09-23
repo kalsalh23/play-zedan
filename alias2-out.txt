@@ -1,0 +1,2 @@
+try {"url":"play-zedan.vercel.app"} -> 400 {"error":{"code":"invalid_alias","message":"The supplied alias .vercel.app is not a valid hostname. Make sure it excludes http:// and slashes"}}
+try {"alias":"play-zedan.vercel.app"} -> 200 {"uid":"e33336b4202a4044ea6b67348ce0777b72ac1958ded753cbbb2a8757c98ab4bca316178d362f9bd1f11c761c5d280f9066b9bd1bb3e80b5a46abd95b3ff19f55","alias":"play-zedan.vercel.app","created":"2026-09-23T17:17:01
