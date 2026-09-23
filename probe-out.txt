@@ -1,0 +1,6 @@
+/sections -> 200 {"status":"success","code":200,"msg":"نجاح العملية","data":{"departments":[{"id":1,"name":"•| واتسٱب |•","img":"https://app.market-card99.com/storage/938/conversions/0tOQeqG7fEoSzBeAnc6dfh9vD0BMex-metaaW1nXzE3MTI1OTE4ODU4NjkucG5n--webp.webp"},{"id":2,"name":"•| تلغرام |•","img":"https://app.market-card99.com/storage/939/conversions/52EKGmA2DpThqNBIdL7B5CbDSHSS6g-metaaW1nXzE3MTI1OTIwOTk0ODMucG5n--webp.webp"},{"id":3,"name":"•| فيسبوك |•","img":"https://app.market-card99.com/storage/978/conversions/IjeKjAxwijb5wdRqbSgtaUGWuS65hg-metaaW1nXzE3MTI3OTU2ODUwNDAucG5n--webp.webp"},{"id":4,"name":"•| يل
+/categories/46 keys: categories,category,products
+  subcats: 18 | products: 0
+  subcat sample: {"id":3,"name":"بوبجي عالمي","info":"بوبجي سيرفر عالمي ","is_available":true,"img":"https://app.market-card99.com/storage/3/conversions/2sW0oNYlxepVUui7PPR9CF163tRF2r-meta2KjYrNmKLdmF2YjYqNin2YrZhC5wbmc=--webp.webp","sliders":["https://app.market-card99.com/storage/2538/conversions/k0LQpUNjfEgdppSC1
+  product sample: null
+  category sliders: ["https://app.market-card99.com/storage/2538/conversions/k0LQpUNjfEgdppSC1YoiNkSWIbvmpo-metaMTAwMDI0MjQzMy5qcGc=--webp.webp"]
