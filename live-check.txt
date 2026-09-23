@@ -1,0 +1,4 @@
+live bundle: v7aHXOkY (local new build: CCZmaLmb)
+new UI text (grid MCImageCard): check
+has departments fetch: false
+has categories fetch: false
