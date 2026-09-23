@@ -1,0 +1,4 @@
+DEL84fnV: ["play-zedan-git-main-kalsalh23s-projects.vercel.app","play-zedan.vercel.app","play-zedan-kalsalh23s-projects.vercel.app"]
+FQvyRN39: []
+C9kfrZsd: []
+latestDeployments: [{"id":"","state":"READY","alias":"play-zedan.vercel.app,play-zedan-kalsalh23s-projects.vercel.app,play-zedan-git-main-kalsalh23s-projects.vercel.app"},{"id":"","state":"READY","alias":"play-zedan.vercel.app,play-zedan-kalsalh23s-projects.vercel.app,play-zedan-git-main-kalsalh23s-projects.vercel.app"}]
