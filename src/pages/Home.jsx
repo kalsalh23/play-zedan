@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Zap, ShieldCheck, Wallet, ChevronLeft, Gamepad2, Headphones, PackageSearch, ArrowLeft, BadgePercent, Search } from 'lucide-react'
 import { supabase } from '../lib/supabase'
-import { HeroIconTile } from '../components/CategoryIcon'
+import MCImageCard, { MCGrid } from '../components/MCImageCard'
 import ProductCard from '../components/ProductCard'
 
 const STEPS = [
@@ -12,30 +12,21 @@ const STEPS = [
 ]
 
 export default function Home() {
+  const [cats, setCats] = useState(null)
   const [products, setProducts] = useState(null)
   const [code, setCode] = useState('')
   const navigate = useNavigate()
 
   useEffect(() => {
+    supabase.from('categories').select('mc_id,name,img').order('sort').then(({ data }) => setCats(data || []))
     supabase
       .from('products')
-      .select('mc_id,name,department_name,img,is_available,sell_unit_price,can_check,max_qty,min_qty,top_category_name,top_category_id')
+      .select('mc_id,name,img,is_available,sell_unit_price,max_qty,min_qty,department_name,top_category_name')
       .eq('is_hidden', false)
       .then(({ data }) => setProducts(data || []))
   }, [])
 
-  const cats = useMemo(() => {
-    const map = new Map()
-    for (const p of products || []) {
-      if (!p.top_category_name) continue
-      const c = map.get(p.top_category_id) || { id: p.top_category_id, name: p.top_category_name, count: 0 }
-      c.count++
-      map.set(p.top_category_id, c)
-    }
-    return [...map.values()].sort((a, b) => b.count - a.count)
-  }, [products])
-
-  const featured = useMemo(() => (products || []).filter((p) => p.is_available && Number(p.sell_unit_price) > 0).slice(0, 8), [products])
+  const featured = useMemo(() => (products || []).filter((p) => p.is_available && Number(p.sell_unit_price) > 0).slice(0, 12), [products])
 
   return (
     <div className="container-app space-y-7">
@@ -86,7 +77,7 @@ export default function Home() {
         </div>
       </section>
 
-      {/* Categories */}
+      {/* Sections — market-card style image grid */}
       <section>
         <div className="mb-3 flex items-center justify-between">
           <h2 className="text-lg font-black text-ink">الأقسام</h2>
@@ -94,26 +85,14 @@ export default function Home() {
             الكل <ArrowLeft className="h-3.5 w-3.5" />
           </Link>
         </div>
-        {!products ? (
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-            {[...Array(4)].map((_, i) => <div key={i} className="skeleton h-20" />)}
-          </div>
-        ) : cats.length === 0 ? (
-          <div className="card p-6 text-center text-xs font-bold text-smoke">
-            لم تُضف الخدمات بعد — تُزامن الأقسام من لوحة الإدارة
-          </div>
+        {!cats ? (
+          <MCGrid>{[...Array(8)].map((_, i) => <div key={i} className="skeleton aspect-square rounded-2xl" />)}</MCGrid>
         ) : (
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+          <MCGrid>
             {cats.map((c) => (
-              <Link key={c.id} to={`/c/${c.id}`} className="card group flex items-center gap-3 p-3.5 transition-all hover:-translate-y-0.5 hover:shadow-lg">
-                <HeroIconTile name={c.name} />
-                <div className="min-w-0">
-                  <p className="truncate text-[13px] font-black text-ink">{c.name}</p>
-                  <p className="text-[10px] font-bold text-smoke">{c.count} خدمة</p>
-                </div>
-              </Link>
+              <MCImageCard key={c.mc_id} to={`/c/${c.mc_id}`} img={c.img} name={c.name} />
             ))}
-          </div>
+          </MCGrid>
         )}
       </section>
 
@@ -123,9 +102,9 @@ export default function Home() {
           <div className="mb-3 flex items-center justify-between">
             <h2 className="text-lg font-black text-ink">الأكثر طلباً</h2>
           </div>
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+          <MCGrid>
             {featured.map((p) => <ProductCard key={p.mc_id} p={p} />)}
-          </div>
+          </MCGrid>
         </section>
       )}
 
