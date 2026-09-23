@@ -5,7 +5,7 @@ import { join, relative, sep } from 'node:path'
 const TOKEN = process.env.GH_TOKEN
 const REPO = 'kalsalh23/play-zedan'
 const SKIP_DIRS = new Set(['node_modules', 'dist', '.vercel', 'dalya_ref', '.git'])
-const SKIP_FILES = new Set(['.env.local', 'analyze.js', 'details.js', 'bills.js', 'recon.js', 'fetch-dalya.js', 'getkeys.js', 'verify-db.js', 'test-api.mjs', 'test-handlers.mjs', 'api_details.txt', 'endpoints.json', 'marketcard_collection.json', 'icon_debug.svg', 'package-lock.json'])
+const SKIP_FILES = new Set(['.env.local', 'analyze.js', 'details.js', 'bills.js', 'recon.js', 'fetch-dalya.js', 'getkeys.js', 'verify-db.js', 'test-api.mjs', 'test-handlers.mjs', 'test-public.js', 'api_details.txt', 'endpoints.json', 'marketcard_collection.json', 'icon_debug.svg', 'package-lock.json', 'mc-register-probe.mjs', 'check-unmapped.mjs', 'diagnose.mjs', 'bundle-check.mjs', 'verify-final.mjs', 'verify-live2.mjs', 'fix-live.mjs', 'fix-alias.mjs', 'fix-alias2.mjs', 'remap-orphans.mjs', '.mc-temp-token.txt', 'deploy-out.txt', 'verify-out.txt', 'diag-out.txt', 'bundle-check.txt', 'remap-out.txt', 'alias-result.txt'])
 
 function walk(dir, out = []) {
   for (const name of readdirSync(dir)) {
