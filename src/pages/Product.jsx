@@ -97,7 +97,7 @@ export default function Product() {
         <h2 className="text-sm font-black text-ink">بيانات الطلب</h2>
 
         <div>
-          <label className="field-label">رقم الحساب / اللاعب / الهاتف *</label>
+          <label className="field-label">{p.label_player_id || p.label_name || 'رقم الحساب / اللاعب / الهاتف'} *</label>
           <input value={idUser} onChange={(e) => setIdUser(e.target.value)} placeholder="أدخل الرقم بدقة قبل المتابعة" className="field tracking-wide" inputMode="text" />
         </div>
 
