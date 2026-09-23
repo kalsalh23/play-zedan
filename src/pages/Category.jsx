@@ -1,82 +1,84 @@
 import { useEffect, useMemo, useState } from 'react'
-import { useParams, useSearchParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
-import { HeroIconTile } from '../components/CategoryIcon'
+import MCImageCard, { MCGrid } from '../components/MCImageCard'
 import ProductCard from '../components/ProductCard'
-import { cn } from '../lib/utils'
+
+export function Sliders({ sliders }) {
+  if (!sliders || sliders.length === 0) return null
+  return (
+    <div className="no-scrollbar -mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-1">
+      {sliders.map((s, i) => (
+        <img key={i} src={s} loading="lazy" alt="" className="h-28 w-auto max-w-[85%] snap-start rounded-2xl border border-chip object-cover shadow-sm sm:h-36" />
+      ))}
+    </div>
+  )
+}
 
 export default function Category() {
   const { topId } = useParams()
-  const [params] = useSearchParams()
-  const depParam = params.get('dep')
+  const [cat, setCat] = useState(null)
+  const [deps, setDeps] = useState(null)
   const [products, setProducts] = useState(null)
 
   useEffect(() => {
-    setProducts(null)
+    setCat(null); setDeps(null); setProducts(null)
+    supabase.from('categories').select('mc_id,name,img,sliders').eq('mc_id', Number(topId)).single().then(({ data }) => setCat(data))
+    supabase.from('departments').select('mc_id,name,img,sliders,top_id').eq('top_id', Number(topId)).then(({ data }) => setDeps(data || []))
     supabase
       .from('products')
-      .select('*')
+      .select('mc_id,name,img,is_available,sell_unit_price,max_qty,min_qty,department_id,department_name,top_category_id')
       .eq('is_hidden', false)
       .eq('top_category_id', Number(topId))
       .then(({ data }) => setProducts(data || []))
   }, [topId])
 
-  const deps = useMemo(() => {
-    const m = new Map()
-    for (const p of products || []) {
-      if (!p.department_name) continue
-      const d = m.get(p.department_id) || { id: p.department_id, name: p.department_name, count: 0 }
-      d.count++
-      m.set(p.department_id, d)
-    }
-    return [...m.values()].sort((a, b) => b.count - a.count)
-  }, [products])
-
-  const filtered = useMemo(() => {
-    let list = products || []
-    if (depParam) list = list.filter((p) => p.department_id === Number(depParam))
-    return [...list].sort((a, b) => (b.is_available - a.is_available) || a.name.localeCompare(b.name, 'ar'))
-  }, [products, depParam])
-
-  const title = products?.[0]?.top_category_name || 'القسم'
+  // all products of this section (department cards above are shortcuts; everything stays discoverable here)
+  const direct = useMemo(
+    () => [...(products || [])].sort((a, b) => b.is_available - a.is_available || a.name.localeCompare(b.name, 'ar')),
+    [products]
+  )
 
   return (
     <div className="container-app space-y-5">
       <div className="flex items-center gap-3">
-        <HeroIconTile name={title} size="md" />
+        {cat?.img && (
+          <div className="h-12 w-12 shrink-0 overflow-hidden rounded-2xl border border-chip bg-white p-1">
+            <img src={cat.img} alt={cat.name} className="h-full w-full object-contain" />
+          </div>
+        )}
         <div>
-          <h1 className="text-xl font-black text-ink">{title}</h1>
-          <p className="text-[11px] font-bold text-smoke">{filtered.length} خدمة متاحة للعرض</p>
+          <h1 className="text-xl font-black text-ink">{cat?.name || '…'}</h1>
+          <p className="text-[11px] font-bold text-smoke">{(deps?.length || 0) > 0 ? `${deps.length} فئة` : ''}{(products?.length || 0) > 0 ? `${deps?.length ? ' • ' : ''}${products.length} خدمة` : ''}</p>
         </div>
       </div>
 
-      {deps.length > 1 && (
-        <div className="no-scrollbar -mx-4 flex gap-2 overflow-x-auto px-4 pb-1">
-          <button onClick={() => history.replaceState(null, '', `/c/${topId}`)} className={cn('chip', !depParam && 'chip-active')}>
-            الكل
-          </button>
-          {deps.map((d) => (
-            <button
-              key={d.id}
-              onClick={() => history.replaceState(null, '', `/c/${topId}?dep=${d.id}`)}
-              className={cn('chip', Number(depParam) === d.id && 'chip-active')}
-            >
-              {d.name}
-            </button>
-          ))}
-        </div>
+      {cat && <Sliders sliders={cat.sliders} />}
+
+      {deps && deps.length > 0 && (
+        <section>
+          <h2 className="mb-3 text-[15px] font-black text-ink">الفئات</h2>
+          <MCGrid>
+            {deps.map((d) => (
+              <MCImageCard key={d.mc_id} to={`/d/${d.mc_id}`} img={d.img} name={d.name} />
+            ))}
+          </MCGrid>
+        </section>
       )}
 
-      {!products ? (
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-          {[...Array(8)].map((_, i) => <div key={i} className="skeleton h-56" />)}
-        </div>
-      ) : filtered.length === 0 ? (
+      {direct.length > 0 && (
+        <section>
+          <h2 className="mb-3 text-[15px] font-black text-ink">الخدمات</h2>
+          <MCGrid>
+            {direct.map((p) => <ProductCard key={p.mc_id} p={p} />)}
+          </MCGrid>
+        </section>
+      )}
+
+      {!cat && <MCGrid>{[...Array(6)].map((_, i) => <div key={i} className="skeleton aspect-square rounded-2xl" />)}</MCGrid>}
+
+      {cat && deps && deps.length === 0 && direct.length === 0 && (
         <div className="card p-8 text-center text-xs font-bold text-smoke">لا توجد خدمات في هذا القسم حالياً</div>
-      ) : (
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-          {filtered.map((p) => <ProductCard key={p.mc_id} p={p} />)}
-        </div>
       )}
     </div>
   )
