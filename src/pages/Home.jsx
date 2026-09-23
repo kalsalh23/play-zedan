@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { Zap, ShieldCheck, Wallet, ChevronLeft, Gamepad2, Smartphone, MessageCircle, Headphones, PackageSearch, ArrowLeft } from 'lucide-react'
+import { Zap, ShieldCheck, Wallet, ChevronLeft, Gamepad2, Headphones, PackageSearch, ArrowLeft, BadgePercent, Search } from 'lucide-react'
 import { supabase } from '../lib/supabase'
 import { HeroIconTile } from '../components/CategoryIcon'
 import ProductCard from '../components/ProductCard'
@@ -38,57 +38,52 @@ export default function Home() {
   const featured = useMemo(() => (products || []).filter((p) => p.is_available && Number(p.sell_unit_price) > 0).slice(0, 8), [products])
 
   return (
-    <div className="container-app space-y-8">
-      {/* Hero */}
-      <section className="hero-gradient relative overflow-hidden rounded-4xl p-6 text-white shadow-xl shadow-plum/25 sm:p-9">
-        <Gamepad2 className="absolute -left-6 -top-6 h-36 w-36 rotate-12 text-white/10" />
-        <Smartphone className="absolute -bottom-8 -right-4 h-28 w-28 -rotate-12 text-white/10" />
-        <MessageCircle className="absolute left-16 bottom-6 h-10 w-10 text-gold/30" />
-        <div className="relative max-w-lg">
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-white/15 px-3 py-1 text-[10px] font-black backdrop-blur">
-            <Zap className="h-3 w-3 text-gold" /> شحن فوري خلال دقائق
-          </span>
-          <h1 className="mt-3 text-2xl font-black leading-snug sm:text-3xl">
-            شحن ألعابك وتطبيقاتك
-            <br />
-            <span className="text-gold">بسرعة وأمان تام</span>
-          </h1>
-          <p className="mt-2 text-xs font-bold leading-6 text-white/80 sm:text-sm">
-            الألعاب، تطبيقات الدردشة، خدمات التواصل والرصيد — كلها في مكان واحد، والدفع بسهولة عبر شام كاش.
-          </p>
-          <div className="mt-5 flex flex-wrap gap-2.5">
-            <Link to="/categories" className="btn-gold !px-5 !py-2.5">
-              تصفح الخدمات <ChevronLeft className="h-4 w-4" />
-            </Link>
-            <Link to="/track" className="btn !bg-white/15 px-5 py-2.5 text-white backdrop-blur hover:!bg-white/25">
-              <PackageSearch className="h-4 w-4" /> تتبع طلبك
-            </Link>
+    <div className="container-app space-y-7">
+      {/* Welcome + quick track */}
+      <section className="space-y-3 pt-1">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-lg font-black text-ink">أهلاً بك في <span className="text-plum">MOBILY BRO+</span> 👋</h1>
+            <p className="text-[11px] font-bold text-smoke">شحن الألعاب والتطبيقات وخدمات التواصل — دفع عبر شام كاش</p>
           </div>
-          <div className="mt-6 flex flex-wrap gap-x-5 gap-y-2 text-[10px] font-black text-white/75">
-            <span className="flex items-center gap-1"><ShieldCheck className="h-3.5 w-3.5 text-gold" /> دفع موثوق</span>
-            <span className="flex items-center gap-1"><Zap className="h-3.5 w-3.5 text-gold" /> تنفيذ آلي</span>
-            <span className="flex items-center gap-1"><Headphones className="h-3.5 w-3.5 text-gold" /> دعم مباشر</span>
-          </div>
+          <ShieldCheck className="h-8 w-8 shrink-0 text-plum/15" />
         </div>
+        <form
+          onSubmit={(e) => { e.preventDefault(); if (code.trim()) navigate('/track?code=' + encodeURIComponent(code.trim())) }}
+          className="card flex items-center gap-2 p-2.5"
+        >
+          <div className="relative flex-1">
+            <PackageSearch className="absolute right-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-smoke" />
+            <input
+              value={code}
+              onChange={(e) => setCode(e.target.value.toUpperCase())}
+              placeholder="تتبع طلبك برقمه…"
+              className="field !border-0 !bg-transparent !py-2 pr-10 tracking-widest"
+            />
+          </div>
+          <button type="submit" className="btn-primary btn-sm shrink-0 !rounded-xl">
+            <Search className="h-3.5 w-3.5" /> تتبع
+          </button>
+        </form>
       </section>
 
-      {/* Quick track */}
-      <section className="card flex flex-col gap-3 p-4 sm:flex-row sm:items-center">
-        <div className="flex-1">
-          <label className="field-label !mb-1">تتبع طلبك برقمه</label>
-          <input
-            value={code}
-            onChange={(e) => setCode(e.target.value.toUpperCase())}
-            placeholder="مثال: MBX7K2P"
-            className="field !py-2.5 tracking-widest"
-          />
+      {/* Slim offer banner */}
+      <section>
+        <Link to="/categories" className="card group flex items-center gap-3 border-r-4 border-gold p-3.5 transition-all hover:-translate-y-0.5 hover:shadow-lg">
+          <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-gold-soft text-gold-dark">
+            <BadgePercent className="h-5 w-5" />
+          </span>
+          <div className="min-w-0 flex-1">
+            <p className="truncate text-[13px] font-black text-ink">عروض وخصومات أسبوعية على كل الأقسام</p>
+            <p className="truncate text-[10px] font-bold text-smoke">تابعنا لمعرفة خصم اليوم — التوصيل فوري خلال دقائق</p>
+          </div>
+          <ChevronLeft className="h-5 w-5 shrink-0 text-plum transition-transform group-hover:-translate-x-1" />
+        </Link>
+        <div className="mt-2.5 flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-[10px] font-black text-smoke">
+          <span className="flex items-center gap-1"><ShieldCheck className="h-3 w-3 text-mint" /> دفع آمن</span>
+          <span className="flex items-center gap-1"><Zap className="h-3 w-3 text-gold" /> تنفيذ آلي</span>
+          <span className="flex items-center gap-1"><Headphones className="h-3 w-3 text-plum" /> دعم مباشر</span>
         </div>
-        <button
-          onClick={() => code.trim() && navigate('/track?code=' + encodeURIComponent(code.trim()))}
-          className="btn-primary !py-2.5 sm:self-end"
-        >
-          <PackageSearch className="h-4 w-4" /> تتبع
-        </button>
       </section>
 
       {/* Categories */}
@@ -101,7 +96,7 @@ export default function Home() {
         </div>
         {!products ? (
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-            {[...Array(4)].map((_, i) => <div key={i} className="skeleton h-24" />)}
+            {[...Array(4)].map((_, i) => <div key={i} className="skeleton h-20" />)}
           </div>
         ) : cats.length === 0 ? (
           <div className="card p-6 text-center text-xs font-bold text-smoke">
@@ -110,7 +105,7 @@ export default function Home() {
         ) : (
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
             {cats.map((c) => (
-              <Link key={c.id} to={`/c/${c.id}`} className="card group flex items-center gap-3 p-4 transition-all hover:-translate-y-0.5 hover:shadow-lg">
+              <Link key={c.id} to={`/c/${c.id}`} className="card group flex items-center gap-3 p-3.5 transition-all hover:-translate-y-0.5 hover:shadow-lg">
                 <HeroIconTile name={c.name} />
                 <div className="min-w-0">
                   <p className="truncate text-[13px] font-black text-ink">{c.name}</p>
@@ -139,13 +134,13 @@ export default function Home() {
         <h2 className="mb-3 text-lg font-black text-ink">كيف تطلب؟</h2>
         <div className="grid gap-3 sm:grid-cols-3">
           {STEPS.map((s, i) => (
-            <div key={i} className="card relative overflow-hidden p-5">
-              <span className="absolute -left-2 -top-3 text-5xl font-black text-chip">{i + 1}</span>
-              <span className="relative grid h-11 w-11 place-items-center rounded-2xl bg-plum/10 text-plum">
-                <s.icon className="h-6 w-6" />
+            <div key={i} className="card relative overflow-hidden p-4">
+              <span className="absolute -left-1 -top-2 text-4xl font-black text-chip">{i + 1}</span>
+              <span className="relative grid h-9 w-9 place-items-center rounded-xl bg-plum/10 text-plum">
+                <s.icon className="h-5 w-5" />
               </span>
-              <h3 className="relative mt-3 text-sm font-black text-ink">{s.title}</h3>
-              <p className="relative mt-1 text-[11px] font-bold leading-5 text-smoke">{s.desc}</p>
+              <h3 className="relative mt-2.5 text-[13px] font-black text-ink">{s.title}</h3>
+              <p className="relative mt-0.5 text-[11px] font-bold leading-5 text-smoke">{s.desc}</p>
             </div>
           ))}
         </div>
