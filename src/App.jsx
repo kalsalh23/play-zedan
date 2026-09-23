@@ -4,6 +4,7 @@ import Layout from './components/Layout.jsx'
 import Home from './pages/Home.jsx'
 import Categories from './pages/Categories.jsx'
 import Category from './pages/Category.jsx'
+import Department from './pages/Department.jsx'
 import Product from './pages/Product.jsx'
 import Pay from './pages/Pay.jsx'
 import Track from './pages/Track.jsx'
@@ -26,6 +27,7 @@ export default function App() {
           <Route path="/" element={<Home />} />
           <Route path="/categories" element={<Categories />} />
           <Route path="/c/:topId" element={<Category />} />
+          <Route path="/d/:depId" element={<Department />} />
           <Route path="/p/:productId" element={<Product />} />
           <Route path="/pay/:code" element={<Pay />} />
           <Route path="/track" element={<Track />} />
