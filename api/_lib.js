@@ -168,14 +168,18 @@ export async function getMcBill(settings, id) {
 }
 
 // ---------- pricing / helpers ----------
+// All pricing is in USD (ShamCash USD balance) — no local-currency conversion.
 export function round100(n) {
   return Math.ceil(Number(n) / 100) * 100
 }
 
+export function roundCents(n) {
+  return Math.round(Number(n) * 100) / 100
+}
+
 export function computeSell(priceUsd, amount, s) {
-  const rate = Number(s.usd_rate || 0)
   const markup = Number(s.markup_percent || 0)
-  return round100(Number(priceUsd) * amount * rate * (1 + markup / 100))
+  return roundCents(Number(priceUsd) * amount * (1 + markup / 100))
 }
 
 export async function recalcSellPrices(s) {
@@ -263,10 +267,9 @@ export function genOrderCode() {
 }
 
 export async function genUniquePayAmount(baseSell) {
-  const base = round100(baseSell)
+  const base = roundCents(baseSell)
   for (let i = 0; i < 40; i++) {
-    const k = crypto.randomInt(1, 100)
-    const pay = base + k
+    const pay = roundCents(base + crypto.randomInt(1, 100) / 100)
     const { count } = await sb
       .from('orders')
       .select('id', { count: 'exact', head: true })
@@ -274,7 +277,7 @@ export async function genUniquePayAmount(baseSell) {
       .eq('status', 'awaiting_payment')
     if (!count) return pay
   }
-  return base + crypto.randomInt(100, 100000)
+  return roundCents(base + crypto.randomInt(100, 100000) / 100)
 }
 
 // ---------- response helpers ----------
