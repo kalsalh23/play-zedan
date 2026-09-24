@@ -1,0 +1,5 @@
+departments: 86 | existing: 752
+rows seen: 357 | new products: 47
+upserted new: 47
+TOTAL products now: 799
+new samples: ["( 10 ) USDT Trc ($15.85)","( 12 ) USDT Trc ($18.29)","( 20 ) USDT Trc ($28.04)","( 25 ) USDT Trc ($34.13)","( 30 ) USDT Trc ($40.23)","( 40 ) USDT Trc ($52.42)","( 50 ) USDT Trc ($64.61)","( 75 ) USDT Trc ($95.08)"]
