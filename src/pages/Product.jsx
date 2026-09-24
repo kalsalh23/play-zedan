@@ -4,7 +4,7 @@ import toast from 'react-hot-toast'
 import { Zap, ShieldCheck, Clock, ImageOff, ChevronLeft, Wallet, Loader2 } from 'lucide-react'
 import { supabase } from '../lib/supabase'
 import { api } from '../lib/api'
-import { fmtSYP, round100 } from '../lib/utils'
+import { fmtUSD, roundCents } from '../lib/utils'
 
 export default function Product() {
   const { productId } = useParams()
@@ -34,7 +34,7 @@ export default function Product() {
 
   const unit = Number(p?.sell_unit_price) > 0 ? Number(p.sell_unit_price) : 0
   const ranged = Number(p?.max_qty) > 0
-  const total = useMemo(() => (unit ? round100(unit * (ranged ? Number(qty) || 0 : 1)) : 0), [unit, qty, ranged])
+  const total = useMemo(() => (unit ? roundCents(unit * (ranged ? Number(qty) || 0 : 1)) : 0), [unit, qty, ranged])
   const available = p?.is_available && unit > 0
 
   if (notFound) return <div className="container-app"><div className="card p-8 text-center text-sm font-black text-ink">المنتج غير موجود</div></div>
@@ -118,7 +118,7 @@ export default function Product() {
 
         <div className="flex items-center justify-between rounded-2xl bg-chip/70 px-4 py-3">
           <span className="flex items-center gap-1.5 text-xs font-black text-ink"><Wallet className="h-4 w-4 text-plum" /> الإجمالي</span>
-          <span className="text-lg font-black text-plum">{total ? fmtSYP(total) : '—'}</span>
+          <span className="text-lg font-black text-plum">{total ? fmtUSD(total) : '—'}</span>
         </div>
 
         <button type="submit" disabled={!available || submitting} className="btn-gradient w-full">
