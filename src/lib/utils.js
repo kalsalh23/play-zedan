@@ -2,8 +2,8 @@ export function cn(...args) {
   return args.filter(Boolean).join(' ')
 }
 
-export function fmtSYP(n) {
-  return new Intl.NumberFormat('ar-SY', { maximumFractionDigits: 0 }).format(Math.round(Number(n) || 0)) + ' ل.ر'
+export function fmtUSD(n) {
+  return '$' + (Math.round((Number(n) || 0) * 100) / 100).toFixed(2)
 }
 
 export function fmtDate(s) {
@@ -15,6 +15,6 @@ export function fmtDate(s) {
   }
 }
 
-export function round100(n) {
-  return Math.ceil(Number(n) / 100) * 100
+export function roundCents(n) {
+  return Math.round((Number(n) || 0) * 100) / 100
 }
