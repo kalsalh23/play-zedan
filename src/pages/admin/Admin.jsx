@@ -312,6 +312,17 @@ function SettingsTab() {
       </div>
 
       <div className="card space-y-4 p-5">
+        <h3 className="text-sm font-black text-ink">بانر العروض (الشاشة الرئيسية)</h3>
+        <div className="grid gap-4 sm:grid-cols-2">
+          <div><label className="field-label">شارة العرض (أعلى البانر)</label><input value={s.hero_badge} onChange={set('hero_badge')} className="field" placeholder="عرض محدود 🔥" /></div>
+          <div><label className="field-label">العنوان الرئيسي</label><input value={s.hero_title} onChange={set('hero_title')} className="field" placeholder="خصومات حتى 20%" /></div>
+          <div className="sm:col-span-2"><label className="field-label">الوصف</label><textarea value={s.hero_subtitle} onChange={set('hero_subtitle')} className="field !min-h-[70px]" /></div>
+          <div><label className="field-label">نص الزر</label><input value={s.hero_btn} onChange={set('hero_btn')} className="field" placeholder="تصفح العروض" /></div>
+          <div><label className="field-label">رابط الزر</label><input value={s.hero_link} onChange={set('hero_link')} className="field" dir="ltr" placeholder="/categories" /></div>
+        </div>
+      </div>
+
+      <div className="card space-y-4 p-5">
         <h3 className="text-sm font-black text-ink">الأمان</h3>
         <div><label className="field-label">كلمة مرور جديدة للوحة</label><input type="password" value={newPass} onChange={(e) => setNewPass(e.target.value)} className="field" placeholder="اتركها فارغة لعدم التغيير" /></div>
       </div>
