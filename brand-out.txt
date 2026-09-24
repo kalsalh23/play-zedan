@@ -1,0 +1,9 @@
+cat 49 قسم تفعيل الأرقام ok
+cat 47 شحن التطبيقات ok
+cat 46 شحن الألعاب ok
+cat 48 الرصيد و الإتصالات ok
+cat 50 دعم الصفحات ok
+cat 53 الدفع الإلكتروني ok
+cat 252 قسم الإشتراكات ok
+cat 66 WINDOWS + GSM ok
+TOTAL branded: 94
