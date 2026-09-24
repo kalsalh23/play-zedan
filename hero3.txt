@@ -1,0 +1,17 @@
+0: bundle=D8PfISuN hero=no
+1: bundle=D8PfISuN hero=no
+2: bundle=D8PfISuN hero=no
+3: bundle=D8PfISuN hero=no
+4: bundle=D8PfISuN hero=no
+5: bundle=D8PfISuN hero=no
+6: bundle=D8PfISuN hero=no
+7: bundle=D8PfISuN hero=no
+8: bundle=D8PfISuN hero=no
+9: bundle=D8PfISuN hero=no
+10: bundle=D8PfISuN hero=no
+11: bundle=D8PfISuN hero=no
+12: bundle=D8PfISuN hero=no
+13: bundle=D8PfISuN hero=no
+14: bundle=D8PfISuN hero=no
+15: bundle=D8PfISuN hero=no
+RESULT: NOT YET ❌
