@@ -1,0 +1,6 @@
+sections with images: 8/8
+  قسم تفعيل الأرقام | شحن التطبيقات | شحن الألعاب | الرصيد و الإتصالات | دعم الصفحات | الدفع الإلكتروني | قسم الإشتراكات | WINDOWS + GSM
+departments with images: 86
+available products with real prices: 601
+cheapest: [{"name":"مشاهدات تيكتوك👁️‍🗨️","sell_unit_price":100},{"name":"يوتيوب إعجابات👍 (غير مضمون)","sell_unit_price":100},{"name":"فيسبوك أحزنني 🥲","sell_unit_price":100}]
+live order test: OK MBJAPTS2
