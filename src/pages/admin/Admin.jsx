@@ -6,7 +6,7 @@ import {
   RotateCcw, PackageSearch, Settings, Boxes, BarChart3, Loader2, Eye, EyeOff, Coins, ImageOff, TriangleAlert,
 } from 'lucide-react'
 import { api, setAdminToken, getAdminToken } from '../../lib/api'
-import { fmtSYP, fmtDate, cn } from '../../lib/utils'
+import { fmtUSD, fmtDate, cn } from '../../lib/utils'
 import { STATUS_META, StatusBadge } from '../../components/Status'
 import { supabase } from '../../lib/supabase'
 
@@ -68,7 +68,7 @@ function OrderCard({ order }) {
         <span className="rounded-lg bg-chip px-2 py-0.5 text-[11px] font-black tracking-widest text-plum" dir="ltr">{order.code}</span>
         <StatusBadge status={order.status} />
         <span className="text-[10px] font-bold text-smoke">{fmtDate(order.created_at)}</span>
-        <span className="mr-auto text-sm font-black text-plum">{fmtSYP(order.sell_price)}<span className="text-[9px] font-bold text-smoke"> (مطلوب: {order.pay_amount})</span></span>
+        <span className="mr-auto text-sm font-black text-plum">{fmtUSD(order.sell_price)}<span className="text-[9px] font-bold text-smoke"> (مطلوب: {order.pay_amount})</span></span>
       </div>
       <div className="mt-2 flex flex-wrap items-center gap-x-4 gap-y-1 text-[11px] font-bold text-smoke">
         <span className="text-ink">{order.product_name}</span>
@@ -138,8 +138,8 @@ function OrdersTab() {
     <div className="space-y-4">
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
         {[
-          { label: 'إيراد اليوم', val: fmtSYP(stats?.revenueToday || 0), icon: Coins, cls: 'bg-emerald-50 text-emerald-600' },
-          { label: 'الإيراد الكلي', val: fmtSYP(stats?.revenueTotal || 0), icon: BarChart3, cls: 'bg-chip text-plum' },
+          { label: 'إيراد اليوم', val: fmtUSD(stats?.revenueToday || 0), icon: Coins, cls: 'bg-emerald-50 text-emerald-600' },
+          { label: 'الإيراد الكلي', val: fmtUSD(stats?.revenueTotal || 0), icon: BarChart3, cls: 'bg-chip text-plum' },
           { label: 'بانتظار التأكيد', val: stats?.by?.awaiting_payment || 0, icon: Clock, cls: 'bg-gold-soft text-gold-dark' },
           { label: 'جارٍ شحنها', val: stats?.by?.processing || 0, icon: Loader2, cls: 'bg-indigo-50 text-indigo-600' },
         ].map((s, i) => (
@@ -241,7 +241,7 @@ function ProductsTab() {
                 <p className="truncate text-xs font-black text-ink">{p.name}</p>
                 <p className="truncate text-[10px] font-bold text-smoke">{p.top_category_name} › {p.department_name} • #{p.mc_id}</p>
               </div>
-              <span className="shrink-0 text-[11px] font-black text-plum">{Number(p.sell_unit_price) > 0 ? fmtSYP(p.sell_unit_price) : '—'}</span>
+              <span className="shrink-0 text-[11px] font-black text-plum">{Number(p.sell_unit_price) > 0 ? fmtUSD(p.sell_unit_price) : '—'}</span>
               <button onClick={() => toggleHidden(p)} className={cn('btn btn-sm !px-2 !py-1.5', p.is_hidden ? 'btn-soft' : 'btn-ghost')} title={p.is_hidden ? 'إظهار' : 'إخفاء'}>
                 {p.is_hidden ? <Eye className="h-3.5 w-3.5" /> : <EyeOff className="h-3.5 w-3.5" />}
               </button>
@@ -290,8 +290,8 @@ function SettingsTab() {
           <div><label className="field-label">الشعار الفرعي</label><input value={s.store_tagline} onChange={set('store_tagline')} className="field" /></div>
           <div><label className="field-label">رقم محفظة شام كاش</label><input value={s.shamcash_number} onChange={set('shamcash_number')} className="field" dir="ltr" placeholder="09xxxxxxxx" /></div>
           <div><label className="field-label">اسم صاحب المحفظة</label><input value={s.shamcash_name} onChange={set('shamcash_name')} className="field" /></div>
-          <div><label className="field-label">سعر الدولار (ل.ر)</label><input type="number" value={s.usd_rate} onChange={set('usd_rate')} className="field" /></div>
           <div><label className="field-label">هامش الربح %</label><input type="number" value={s.markup_percent} onChange={set('markup_percent')} className="field" /></div>
+          <div className="sm:col-span-2 rounded-2xl bg-chip/60 p-3 text-[10px] font-bold leading-5 text-smoke">الأسعار تُعرض وتُحسب بالدولار الأمريكي مباشرة (سعر الجملة + هامش الربح) — والدفع عبر رصيد شام كاش الدولاري.</div>
         </div>
       </div>
 
