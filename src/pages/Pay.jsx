@@ -3,7 +3,7 @@ import { useParams, Link } from 'react-router-dom'
 import toast from 'react-hot-toast'
 import { Copy, Check, Smartphone, Wallet, BadgeCheck, PartyPopper, XCircle, Loader2, ImageOff } from 'lucide-react'
 import { api } from '../lib/api'
-import { fmtSYP, fmtDate, cn } from '../lib/utils'
+import { fmtUSD, fmtDate, cn } from '../lib/utils'
 import { StatusBadge, StatusTimeline } from '../components/Status'
 
 function CopyRow({ label, value, big }) {
@@ -67,7 +67,7 @@ export function OrderPanel({ order }) {
           </div>
           <div className="p-3">
             <p className="text-[10px] font-black text-smoke">قيمة الطلب</p>
-            <p className="text-base font-black text-plum">{fmtSYP(order.sell_price)}</p>
+            <p className="text-base font-black text-plum">{fmtUSD(order.sell_price)}</p>
           </div>
         </div>
 
@@ -79,7 +79,7 @@ export function OrderPanel({ order }) {
       {waiting && (
         <div className="card space-y-3 p-5">
           <h3 className="flex items-center gap-2 text-sm font-black text-ink"><Smartphone className="h-4 w-4 text-plum" /> خطوات الدفع عبر شام كاش</h3>
-          <CopyRow big label="حوّل هذا المبلغ بالضبط" value={String(order.pay_amount)} />
+          <CopyRow big label="حوّل هذا المبلغ بالضبط (دولار)" value={String(order.pay_amount)} />
           <CopyRow label="إلى رقم محفظة شام كاش" value={order.shamcash_number || '— لم يُضبط رقم المحفظة بعد —'} />
           {order.shamcash_name && <CopyRow label="اسم صاحب المحفظة" value={order.shamcash_name} />}
           <ol className="space-y-1.5 rounded-2xl bg-chip/60 p-4 text-[11px] font-bold leading-6 text-ink">
