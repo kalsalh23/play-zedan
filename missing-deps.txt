@@ -1,0 +1,80 @@
+departments: 86
+existing products: 752
+dep fail ايتونز تركي: 429
+dep fail Perfect Money: 429
+dep fail PAYCELL : 429
+dep fail رصيد PAPARA: 429
+dep fail كوكل بلاي 🇺🇸: 429
+dep fail كوكل بلاي🇹🇷: 429
+dep fail  X BOX: 429
+dep fail STEAM: 429
+dep fail Play station: 429
+dep fail CAPCUT: 429
+dep fail Canva: 429
+dep fail CHAT GPT: 429
+dep fail تلجرام بروميو: 429
+dep fail نجوم تلجرام 🌟: 429
+dep fail إشتراكات شاهد: 429
+dep fail Netflix: 429
+dep fail CRUNCHY ROLL: 429
+dep fail HALAB TECH: 429
+dep fail DZKJ: 429
+dep fail EFT PRO: 429
+dep fail GRIFFIN TOOL: 429
+dep fail SIGMA BOX: 429
+dep fail ESTECH: 429
+dep fail BORNEO: 429
+dep fail CHIMERA: 429
+dep fail DFT PRO: 429
+total product rows across departments: 268
+NEW products not in DB: 21
+samples: [
+ {
+  "id": 607,
+  "name": "( 10 ) USDT Trc",
+  "unit": 13.78,
+  "dep": "USDT _ TRC-20",
+  "min": 0,
+  "max": 0
+ },
+ {
+  "id": 730,
+  "name": "( 12 ) USDT Trc",
+  "unit": 15.9,
+  "dep": "USDT _ TRC-20",
+  "min": 0,
+  "max": 0
+ },
+ {
+  "id": 727,
+  "name": "( 20 ) USDT Trc",
+  "unit": 24.38,
+  "dep": "USDT _ TRC-20",
+  "min": 0,
+  "max": 0
+ },
+ {
+  "id": 608,
+  "name": "( 25 ) USDT Trc",
+  "unit": 29.68,
+  "dep": "USDT _ TRC-20",
+  "min": 0,
+  "max": 0
+ },
+ {
+  "id": 719,
+  "name": "( 30 ) USDT Trc",
+  "unit": 34.98,
+  "dep": "USDT _ TRC-20",
+  "min": 0,
+  "max": 0
+ },
+ {
+  "id": 720,
+  "name": "( 40 ) USDT Trc",
+  "unit": 45.58,
+  "dep": "USDT _ TRC-20",
+  "min": 0,
+  "max": 0
+ }
+]
