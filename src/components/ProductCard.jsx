@@ -1,12 +1,12 @@
 import MCImageCard from './MCImageCard'
-import { fmtSYP, round100 } from '../lib/utils'
+import { fmtUSD, roundCents } from '../lib/utils'
 
 // Product card in market-card style: image tile, name below, price under it.
 export default function ProductCard({ p }) {
   const unit = Number(p.sell_unit_price) > 0 ? Number(p.sell_unit_price) : 0
   const ranged = Number(p.max_qty) > 0
   const available = p.is_available && unit > 0
-  const from = unit ? fmtSYP(round100(unit * (Number(p.min_qty) || 1))) : null
+  const from = unit ? fmtUSD(roundCents(unit * (Number(p.min_qty) || 1))) : null
   return (
     <MCImageCard
       to={`/p/${p.mc_id}`}
