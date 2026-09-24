@@ -1,2 +1,2 @@
-play-zedan.vercel.app | bundle=v7aHXOkY | newUI=false
+play-zedan.vercel.app | bundle=D8PfISuN | newUI=true
 play-zedan-a00j3t1vl-kalsalh23s-projects.vercel.app | bundle=? | newUI=false
