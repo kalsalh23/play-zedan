@@ -50,27 +50,26 @@ export default function Home() {
 
   return (
     <div className="container-app space-y-7">
-      {/* Big rectangular offers hero */}
-      <section className="hero-gradient relative overflow-hidden rounded-4xl p-6 text-white shadow-xl shadow-plum/25 sm:p-9">
-        <div className="absolute -left-12 -top-12 h-44 w-44 rounded-full bg-white/10 blur-2xl" aria-hidden />
-        <div className="absolute -bottom-16 -right-10 h-48 w-48 rounded-full bg-gold/25 blur-3xl" aria-hidden />
-        <span className="pointer-events-none absolute -left-2 top-1/2 hidden -translate-y-1/2 select-none text-[150px] font-black leading-none text-white/10 sm:block" aria-hidden>%</span>
-        <Gamepad2 className="pointer-events-none absolute -right-4 -top-4 h-24 w-24 rotate-12 text-white/10" aria-hidden />
+      {/* Offers hero — compact rectangular banner */}
+      <section className="hero-gradient relative overflow-hidden rounded-4xl p-5 text-white shadow-lg shadow-plum/25 sm:p-7">
+        <div className="absolute -left-12 -top-12 h-36 w-36 rounded-full bg-white/10 blur-2xl" aria-hidden />
+        <div className="absolute -bottom-16 -right-10 h-40 w-40 rounded-full bg-gold/25 blur-3xl" aria-hidden />
+        <span className="pointer-events-none absolute -left-2 top-1/2 hidden -translate-y-1/2 select-none text-[120px] font-black leading-none text-white/10 sm:block" aria-hidden>%</span>
         <div className="relative max-w-xl">
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-gold px-3.5 py-1.5 text-[11px] font-black text-plum-dark shadow-lg shadow-gold/30">
-            <Flame className="h-3.5 w-3.5" /> {hero.hero_badge}
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-gold px-3 py-1 text-[10px] font-black text-plum-dark shadow-md shadow-gold/30">
+            <Flame className="h-3 w-3" /> {hero.hero_badge}
           </span>
-          <h1 className="mt-3 text-[26px] font-black leading-snug sm:text-3xl">{hero.hero_title}</h1>
-          <p className="mt-2 text-xs font-bold leading-6 text-white/85 sm:text-sm">{hero.hero_subtitle}</p>
-          <div className="mt-5 flex flex-wrap items-center gap-2.5">
-            <Link to={hero.hero_link || '/categories'} className="btn-gold !px-6">
-              {hero.hero_btn} <ChevronLeft className="h-4 w-4" />
+          <h1 className="mt-2.5 text-xl font-black leading-snug sm:text-2xl">{hero.hero_title}</h1>
+          <p className="mt-1.5 text-[11px] font-bold leading-5 text-white/85 sm:text-xs">{hero.hero_subtitle}</p>
+          <div className="mt-3.5 flex flex-wrap items-center gap-2">
+            <Link to={hero.hero_link || '/categories'} className="btn-gold btn-sm !px-5 !py-2.5 !text-xs">
+              {hero.hero_btn} <ChevronLeft className="h-3.5 w-3.5" />
             </Link>
-            <Link to="/track" className="btn !bg-white/15 px-5 text-white backdrop-blur hover:!bg-white/25">
-              <PackageSearch className="h-4 w-4" /> تتبع طلبك
+            <Link to="/track" className="btn btn-sm !bg-white/15 !px-4 !py-2.5 !text-xs text-white backdrop-blur hover:!bg-white/25">
+              <PackageSearch className="h-3.5 w-3.5" /> تتبع طلبك
             </Link>
           </div>
-          <div className="mt-5 flex flex-wrap gap-x-4 gap-y-1 text-[10px] font-black text-white/75">
+          <div className="mt-3.5 flex flex-wrap gap-x-4 gap-y-1 text-[9px] font-black text-white/70">
             <span className="flex items-center gap-1"><ShieldCheck className="h-3 w-3 text-gold" /> دفع آمن عبر شام كاش</span>
             <span className="flex items-center gap-1"><Zap className="h-3 w-3 text-gold" /> تنفيذ آلي فوري</span>
             <span className="flex items-center gap-1"><Headphones className="h-3 w-3 text-gold" /> دعم مباشر</span>
