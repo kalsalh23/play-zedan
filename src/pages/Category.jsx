@@ -1,8 +1,9 @@
 import { useEffect, useMemo, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import MCImageCard, { MCGrid } from '../components/MCImageCard'
 import ProductCard from '../components/ProductCard'
+import PackageSheet from '../components/PackageSheet'
 
 export function Sliders({ sliders }) {
   if (!sliders || sliders.length === 0) return null
@@ -24,12 +25,14 @@ export function Sliders({ sliders }) {
 
 export default function Category() {
   const { topId } = useParams()
+  const navigate = useNavigate()
   const [cat, setCat] = useState(null)
   const [deps, setDeps] = useState(null)
   const [products, setProducts] = useState(null)
+  const [sheetDep, setSheetDep] = useState(null)
 
   useEffect(() => {
-    setCat(null); setDeps(null); setProducts(null)
+    setCat(null); setDeps(null); setProducts(null); setSheetDep(null)
     supabase.from('categories').select('mc_id,name,img,sliders').eq('mc_id', Number(topId)).single().then(({ data }) => setCat(data))
     supabase.from('departments').select('mc_id,name,img,sliders,top_id').eq('top_id', Number(topId)).then(({ data }) => setDeps(data || []))
     supabase
@@ -40,8 +43,17 @@ export default function Category() {
       .then(({ data }) => setProducts(data || []))
   }, [topId])
 
-  // all products of this section (department cards above are shortcuts; everything stays discoverable here)
-  const direct = useMemo(
+  // which departments have children (parent-level) vs are leaves (open package sheet)
+  const [parentIds, setParentIds] = useState(new Set())
+  useEffect(() => {
+    supabase.from('departments').select('mc_id,parent_id').then(({ data }) => {
+      const s = new Set()
+      for (const d of data || []) if (d.parent_id) s.add(d.parent_id)
+      setParentIds(s)
+    })
+  }, [])
+
+  const all = useMemo(
     () => [...(products || [])].sort((a, b) => b.is_available - a.is_available || a.name.localeCompare(b.name, 'ar')),
     [products]
   )
@@ -66,27 +78,38 @@ export default function Category() {
         <section>
           <h2 className="mb-3 text-[15px] font-black text-ink">الفئات</h2>
           <MCGrid>
-            {deps.map((d) => (
-              <MCImageCard key={d.mc_id} to={`/d/${d.mc_id}`} img={d.img} name={d.name} />
-            ))}
+            {deps.map((d) => {
+              const isParent = parentIds.has(d.mc_id)
+              return (
+                <MCImageCard
+                  key={d.mc_id}
+                  to={isParent ? `/d/${d.mc_id}` : undefined}
+                  img={d.img}
+                  name={d.name}
+                  onClick={isParent ? undefined : () => setSheetDep(d)}
+                />
+              )
+            })}
           </MCGrid>
         </section>
       )}
 
-      {direct.length > 0 && (
+      {all.length > 0 && (
         <section>
           <h2 className="mb-3 text-[15px] font-black text-ink">الخدمات</h2>
           <MCGrid>
-            {direct.map((p) => <ProductCard key={p.mc_id} p={p} />)}
+            {all.map((p) => <ProductCard key={p.mc_id} p={p} />)}
           </MCGrid>
         </section>
       )}
 
       {!cat && <MCGrid>{[...Array(6)].map((_, i) => <div key={i} className="skeleton aspect-square rounded-2xl" />)}</MCGrid>}
 
-      {cat && deps && deps.length === 0 && direct.length === 0 && (
+      {cat && deps && deps.length === 0 && all.length === 0 && (
         <div className="card p-8 text-center text-xs font-bold text-smoke">لا توجد خدمات في هذا القسم حالياً</div>
       )}
+
+      {sheetDep && <PackageSheet dep={sheetDep} onClose={() => setSheetDep(null)} />}
     </div>
   )
 }
