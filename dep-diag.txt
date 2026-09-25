@@ -1,0 +1,7 @@
+interesting departments: 3:بوبجي عالمي | 4:فري فاير | 35:بوبجي نيو ستيت
+DEP 3 [بوبجي عالمي] top=شحن الألعاب | DB: 0 products () | API: 0 ()
+DEP 4 [فري فاير] top=شحن الألعاب | DB: 0 products () | API: 0 ()
+DEP 35 [بوبجي نيو ستيت] top=شحن الألعاب | DB: 0 products () | API: 0 ()
+
+departments with ZERO products in DB: 6
+3:بوبجي عالمي | 4:فري فاير | 35:بوبجي نيو ستيت | 62:Ball pool 8 | 110:FC MOBILE | 166:كوكل بلاي 🇺🇸
