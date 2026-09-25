@@ -7,12 +7,14 @@ import ProductCard from '../components/ProductCard'
 
 export default function Department() {
   const { depId } = useParams()
+  const navigate = useNavigate()
   const [dep, setDep] = useState(null)
   const [children, setChildren] = useState(null)
   const [products, setProducts] = useState(null)
+  const [sheetDep, setSheetDep] = useState(null)
 
   useEffect(() => {
-    setDep(null); setChildren(null); setProducts(null)
+    setDep(null); setChildren(null); setProducts(null); setSheetDep(null)
     supabase.from('departments').select('mc_id,name,img,sliders,top_id,top_name').eq('mc_id', Number(depId)).single().then(({ data }) => setDep(data))
     supabase
       .from('departments')
@@ -26,6 +28,15 @@ export default function Department() {
       .eq('department_id', Number(depId))
       .then(({ data }) => setProducts(data || []))
   }, [depId])
+
+  const [parentIds, setParentIds] = useState(new Set())
+  useEffect(() => {
+    supabase.from('departments').select('mc_id,parent_id').then(({ data }) => {
+      const s = new Set()
+      for (const d of data || []) if (d.parent_id) s.add(d.parent_id)
+      setParentIds(s)
+    })
+  }, [])
 
   const sorted = useMemo(() => [...(products || [])].sort((a, b) => b.is_available - a.is_available), [products])
   // hide own products if it has sub-departments (market-card hierarchy: browse through children)
@@ -51,9 +62,18 @@ export default function Department() {
         <section>
           <h2 className="mb-3 text-[15px] font-black text-ink">الفئات</h2>
           <MCGrid>
-            {children.map((c) => (
-              <MCImageCard key={c.mc_id} to={`/d/${c.mc_id}`} img={c.img} name={c.name} />
-            ))}
+            {children.map((c) => {
+              const isParent = parentIds.has(c.mc_id)
+              return (
+                <MCImageCard
+                  key={c.mc_id}
+                  to={isParent ? `/d/${c.mc_id}` : undefined}
+                  img={c.img}
+                  name={c.name}
+                  onClick={isParent ? undefined : () => setSheetDep(c)}
+                />
+              )
+            })}
           </MCGrid>
         </section>
       )}
@@ -67,6 +87,8 @@ export default function Department() {
           {sorted.map((p) => <ProductCard key={p.mc_id} p={p} />)}
         </MCGrid>
       ))}
+
+      {sheetDep && <PackageSheet dep={sheetDep} onClose={() => setSheetDep(null)} />}
     </div>
   )
 }
