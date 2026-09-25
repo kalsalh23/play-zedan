@@ -10,10 +10,10 @@ export default function Department() {
   const [dep, setDep] = useState(null)
   const [children, setChildren] = useState(null)
   const [products, setProducts] = useState(null)
-  const [sheetDep, setSheetDep] = useState(null)
+  const [sheet, setSheet] = useState(null)
 
   useEffect(() => {
-    setDep(null); setChildren(null); setProducts(null); setSheetDep(null)
+    setDep(null); setChildren(null); setProducts(null); setSheet(null)
     supabase.from('departments').select('mc_id,name,img,sliders,top_id,top_name').eq('mc_id', Number(depId)).single().then(({ data }) => setDep(data))
     supabase
       .from('departments')
@@ -57,7 +57,7 @@ export default function Department() {
                 key={c.mc_id}
                 img={c.img}
                 name={c.name}
-                onClick={() => setSheetDep(c)}
+                onClick={() => setSheet({ dep: c })}
               />
             ))}
           </MCGrid>
@@ -70,11 +70,17 @@ export default function Department() {
         <div className="card p-8 text-center text-xs font-bold text-smoke">لا توجد خدمات في هذه الفئة حالياً</div>
       ) : (
         <MCGrid>
-          {sorted.map((p) => <ProductCard key={p.mc_id} p={p} />)}
+          {sorted.map((p) => (
+            <ProductCard
+              key={p.mc_id}
+              p={p}
+              onBuy={(prod) => setSheet({ dep: { mc_id: prod.department_id, name: prod.department_name, img: prod.img }, preselect: prod.mc_id })}
+            />
+          ))}
         </MCGrid>
       ))}
 
-      {sheetDep && <PackageSheet dep={sheetDep} onClose={() => setSheetDep(null)} />}
+      {sheet && <PackageSheet dep={sheet.dep} preselect={sheet.preselect} onClose={() => setSheet(null)} />}
     </div>
   )
 }
