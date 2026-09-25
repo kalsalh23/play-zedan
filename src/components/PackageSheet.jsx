@@ -19,12 +19,18 @@ export default function PackageSheet({ dep, onClose }) {
   useEffect(() => {
     setProducts(null)
     setSelected(null)
+    // combine the department's own products + all its sub-departments' products
     supabase
-      .from('products')
-      .select('mc_id,name,info,img,is_available,sell_unit_price,min_qty,max_qty,can_check,label_player_id,label_name')
-      .eq('is_hidden', false)
-      .eq('department_id', Number(dep.mc_id))
-      .then(({ data }) => {
+      .from('departments')
+      .select('mc_id,name')
+      .eq('parent_id', Number(dep.mc_id))
+      .then(async ({ data: kids }) => {
+        const ids = [Number(dep.mc_id), ...((kids || []).map((k) => k.mc_id))]
+        const { data } = await supabase
+          .from('products')
+          .select('mc_id,name,info,img,is_available,sell_unit_price,min_qty,max_qty,can_check,label_player_id,label_name,department_id,department_name')
+          .eq('is_hidden', false)
+          .in('department_id', ids)
         const list = (data || []).sort((a, b) => b.is_available - a.is_available)
         setProducts(list)
         const first = list.find((p) => p.is_available)
@@ -36,6 +42,17 @@ export default function PackageSheet({ dep, onClose }) {
   }, [dep.mc_id])
 
   const sel = useMemo(() => (products || []).find((p) => p.mc_id === selected) || null, [products, selected])
+  // group products by sub-department when the sheet spans multiple (parent with children)
+  const groups = useMemo(() => {
+    if (!products || !products.length) return []
+    const m = new Map()
+    for (const p of products) {
+      const k = p.department_name || dep.name
+      if (!m.has(k)) m.set(k, [])
+      m.get(k).push(p)
+    }
+    return [...m.entries()].map(([name, list]) => ({ name, list: list.sort((a, b) => b.is_available - a.is_available) }))
+  }, [products, dep.name])
   const ranged = sel ? Number(sel.max_qty) > 0 : false
   const total = useMemo(() => {
     if (!sel) return 0
@@ -123,41 +140,46 @@ export default function PackageSheet({ dep, onClose }) {
             ) : products.length === 0 ? (
               <div className="rounded-2xl bg-chip/60 p-4 text-center text-xs font-bold text-smoke">لا توجد باقات في هذه الفئة حالياً</div>
             ) : (
-              products.map((p) => {
-                const isSel = selected === p.mc_id
-                const unit = Number(p.sell_unit_price)
-                const pRanged = Number(p.max_qty) > 0
-                const price = unit > 0 ? fmtUSD(roundCents(unit * (pRanged ? Number(p.min_qty) || 1 : 1))) : null
-                return (
-                  <button
-                    key={p.mc_id}
-                    onClick={() => pick(p)}
-                    disabled={!p.is_available}
-                    className={cn(
-                      'flex w-full items-center gap-3 rounded-2xl border-2 p-3.5 text-right transition-all',
-                      isSel ? 'border-plum bg-plum/5 shadow-md shadow-plum/10' : 'border-chip bg-chip/40 hover:border-plum/40',
-                      !p.is_available && 'opacity-50'
-                    )}
-                  >
-                    <span className="min-w-0 flex-1">
-                      <span className="block truncate text-[13px] font-extrabold text-ink">{p.name}</span>
-                      {p.is_available ? (
-                        <span className="mt-0.5 flex items-center gap-1.5">
-                          <span className="text-[15px] font-black text-plum">{price || '—'}</span>
-                          <span className="inline-flex items-center gap-0.5 rounded-full bg-emerald-50 px-2 py-0.5 text-[9px] font-black text-emerald-600">
-                            <Zap className="h-2.5 w-2.5" /> فوري
-                          </span>
+              groups.map((g) => (
+                <div key={g.name} className="space-y-2.5">
+                  {groups.length > 1 && <p className="pt-1 text-[11px] font-black text-plum/70">— {g.name} —</p>}
+                  {g.list.map((p) => {
+                    const isSel = selected === p.mc_id
+                    const unit = Number(p.sell_unit_price)
+                    const pRanged = Number(p.max_qty) > 0
+                    const price = unit > 0 ? fmtUSD(roundCents(unit * (pRanged ? Number(p.min_qty) || 1 : 1))) : null
+                    return (
+                      <button
+                        key={p.mc_id}
+                        onClick={() => pick(p)}
+                        disabled={!p.is_available}
+                        className={cn(
+                          'flex w-full items-center gap-3 rounded-2xl border-2 p-3.5 text-right transition-all',
+                          isSel ? 'border-plum bg-plum/5 shadow-md shadow-plum/10' : 'border-chip bg-chip/40 hover:border-plum/40',
+                          !p.is_available && 'opacity-50'
+                        )}
+                      >
+                        <span className="min-w-0 flex-1">
+                          <span className="block truncate text-[13px] font-extrabold text-ink">{p.name}</span>
+                          {p.is_available ? (
+                            <span className="mt-0.5 flex items-center gap-1.5">
+                              <span className="text-[15px] font-black text-plum">{price || '—'}</span>
+                              <span className="inline-flex items-center gap-0.5 rounded-full bg-emerald-50 px-2 py-0.5 text-[9px] font-black text-emerald-600">
+                                <Zap className="h-2.5 w-2.5" /> فوري
+                              </span>
+                            </span>
+                          ) : (
+                            <span className="text-[11px] font-bold text-rose">غير متوفر حالياً</span>
+                          )}
                         </span>
-                      ) : (
-                        <span className="text-[11px] font-bold text-rose">غير متوفر حالياً</span>
-                      )}
-                    </span>
-                    <span className={cn('grid h-5 w-5 shrink-0 place-items-center rounded-full border-2 transition-colors', isSel ? 'border-plum' : 'border-smoke/40')}>
-                      {isSel && <span className="h-2.5 w-2.5 rounded-full bg-plum" />}
-                    </span>
-                  </button>
-                )
-              })
+                        <span className={cn('grid h-5 w-5 shrink-0 place-items-center rounded-full border-2 transition-colors', isSel ? 'border-plum' : 'border-smoke/40')}>
+                          {isSel && <span className="h-2.5 w-2.5 rounded-full bg-plum" />}
+                        </span>
+                      </button>
+                    )
+                  })}
+                </div>
+              ))
             )}
           </div>
         </div>
