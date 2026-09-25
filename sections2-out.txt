@@ -1,2 +1,0 @@
-/sections/1 -> keys: programs,user | products: 0
-/sections/2 -> keys: programs,user | products: 0
