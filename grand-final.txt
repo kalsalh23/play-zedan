@@ -1,0 +1,7 @@
+bundle: ClLNBt0q
+ad slider (hero-track): ✓
+bottom nav 4 items (admin): ✓
+universal package sheet: ✓
+grouped packages: ✓
+USD pricing: ✓
+order flow: OK MBN3XCMD
