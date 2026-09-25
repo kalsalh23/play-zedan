@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom'
+import { Routes, Route, Navigate } from 'react-router-dom'
 import { Toaster } from 'react-hot-toast'
 import Layout from './components/Layout.jsx'
 import Home from './pages/Home.jsx'
@@ -11,6 +11,9 @@ import Track from './pages/Track.jsx'
 import AdminLogin from './pages/admin/AdminLogin.jsx'
 import Admin from './pages/admin/Admin.jsx'
 
+// private panel path — never linked from the storefront
+export const PANEL_PATH = '/panel-z7k4a9x2'
+
 export default function App() {
   return (
     <>
@@ -21,8 +24,10 @@ export default function App() {
         }}
       />
       <Routes>
-        <Route path="/admin" element={<AdminLogin />} />
-        <Route path="/admin/dashboard" element={<Admin />} />
+        <Route path={PANEL_PATH} element={<AdminLogin />} />
+        <Route path={PANEL_PATH + '/dashboard'} element={<Admin />} />
+        <Route path="/admin" element={<Navigate to="/" replace />} />
+        <Route path="/admin/dashboard" element={<Navigate to="/" replace />} />
         <Route element={<Layout />}>
           <Route path="/" element={<Home />} />
           <Route path="/categories" element={<Categories />} />
