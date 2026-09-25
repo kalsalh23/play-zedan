@@ -5,6 +5,7 @@ import { supabase } from '../lib/supabase'
 import { api } from '../lib/api'
 import MCImageCard, { MCGrid } from '../components/MCImageCard'
 import ProductCard from '../components/ProductCard'
+import PackageSheet from '../components/PackageSheet'
 
 const STEPS = [
   { icon: Gamepad2, title: 'اختر المنتج', desc: 'تصفح الأقسام واختر ما يناسبك' },
@@ -26,6 +27,7 @@ export default function Home() {
   const [hero, setHero] = useState(DEFAULT_HERO)
   const [banners, setBanners] = useState(null)
   const [slide, setSlide] = useState(0)
+  const [sheet, setSheet] = useState(null)
   const [code, setCode] = useState('')
   const navigate = useNavigate()
 
@@ -33,7 +35,7 @@ export default function Home() {
     supabase.from('categories').select('mc_id,name,img').order('sort').then(({ data }) => setCats(data || []))
     supabase
       .from('products')
-      .select('mc_id,name,img,is_available,sell_unit_price,max_qty,min_qty,department_name,top_category_name')
+      .select('mc_id,name,img,is_available,sell_unit_price,max_qty,min_qty,department_id,department_name')
       .eq('is_hidden', false)
       .then(({ data }) => setProducts(data || []))
     supabase.from('banners').select('id,img,link,title').order('sort').then(({ data }) => setBanners(data || []))
@@ -186,7 +188,13 @@ export default function Home() {
             <h2 className="text-lg font-black text-ink">الأكثر طلباً</h2>
           </div>
           <MCGrid>
-            {featured.map((p) => <ProductCard key={p.mc_id} p={p} />)}
+            {featured.map((p) => (
+              <ProductCard
+                key={p.mc_id}
+                p={p}
+                onBuy={(prod) => setSheet({ dep: { mc_id: prod.department_id, name: prod.department_name, img: prod.img }, preselect: prod.mc_id })}
+              />
+            ))}
           </MCGrid>
         </section>
       )}
@@ -207,6 +215,8 @@ export default function Home() {
           ))}
         </div>
       </section>
+
+      {sheet && <PackageSheet dep={sheet.dep} preselect={sheet.preselect} onClose={() => setSheet(null)} />}
     </div>
   )
 }
