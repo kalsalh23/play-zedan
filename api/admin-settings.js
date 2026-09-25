@@ -4,7 +4,7 @@ import { getSettings, upsertSettings, requireAdmin, sha256, issueToken, recalcSe
 const EDITABLE = [
   'store_name', 'store_tagline', 'usd_rate', 'markup_percent',
   'shamcash_number', 'shamcash_name', 'mc_username', 'mc_password',
-  'mc_purchase_password', 'mc_demo', 'install_banner',
+  'mc_purchase_password', 'mc_demo', 'install_banner', 'admin_email',
   'hero_badge', 'hero_title', 'hero_subtitle', 'hero_btn', 'hero_link',
 ]
 
