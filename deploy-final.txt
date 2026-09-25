@@ -1,0 +1,3 @@
+0: bundle=DJa-jOZA hero=YES usd=YES
+order MBR8FPYU: pay_amount=2.44 sell=2.23 (USD expected, e.g. ~1.18)
+FINAL: HERO + USD LIVE ✅
