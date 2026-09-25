@@ -7,7 +7,7 @@ import { api } from '../lib/api'
 import { fmtUSD, roundCents, cn } from '../lib/utils'
 
 // Bottom-sheet package picker (market-card style list) for a department
-export default function PackageSheet({ dep, onClose }) {
+export default function PackageSheet({ dep, preselect, onClose }) {
   const navigate = useNavigate()
   const [products, setProducts] = useState(null)
   const [selected, setSelected] = useState(null)
@@ -33,13 +33,14 @@ export default function PackageSheet({ dep, onClose }) {
           .in('department_id', ids)
         const list = (data || []).sort((a, b) => b.is_available - a.is_available)
         setProducts(list)
-        const first = list.find((p) => p.is_available)
+        const wanted = preselect ? list.find((p) => p.mc_id === Number(preselect)) : null
+        const first = wanted && wanted.is_available ? wanted : list.find((p) => p.is_available)
         if (first) {
           setSelected(first.mc_id)
           if (Number(first.min_qty) > 0) setQty(Number(first.min_qty))
         }
       })
-  }, [dep.mc_id])
+  }, [dep.mc_id, preselect])
 
   const sel = useMemo(() => (products || []).find((p) => p.mc_id === selected) || null, [products, selected])
   // group products by sub-department when the sheet spans multiple (parent with children)
