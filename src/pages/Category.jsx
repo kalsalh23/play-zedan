@@ -7,9 +7,16 @@ import ProductCard from '../components/ProductCard'
 export function Sliders({ sliders }) {
   if (!sliders || sliders.length === 0) return null
   return (
-    <div className="no-scrollbar -mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-1">
+    <div className="no-scrollbar -mx-4 flex snap-x snap-mandatory overflow-x-auto px-4 pb-1">
       {sliders.map((s, i) => (
-        <img key={i} src={s} loading="lazy" alt="" className="h-28 w-auto max-w-[85%] snap-start rounded-2xl border border-chip object-cover shadow-sm sm:h-36" />
+        <div key={i} className="w-full min-w-full snap-start px-0.5">
+          <img
+            src={s}
+            loading="lazy"
+            alt=""
+            className="h-36 w-full rounded-2xl border border-chip object-cover shadow-sm sm:h-44"
+          />
+        </div>
       ))}
     </div>
   )
