@@ -8,6 +8,7 @@ const NAV = [
   { to: '/', label: 'الرئيسية', icon: Home, end: true },
   { to: '/categories', label: 'الأقسام', icon: LayoutGrid, end: false },
   { to: '/track', label: 'تتبع طلب', icon: Search, end: false },
+  { to: '/admin', label: 'الإدارة', icon: ShieldCheck, end: false },
 ]
 
 function Logo({ size = 'md' }) {
@@ -92,11 +93,11 @@ export default function Layout() {
           <div className="flex items-center gap-1">
             {!isStandalone() && (
               <button onClick={() => setShowInstall(true)} className="btn-ghost !px-2.5" title="تثبيت التطبيق">
-                <Download className="h-4.5 w-4.5 h-5 w-5" />
+                <Download className="h-5 w-5" />
               </button>
             )}
-            <Link to="/admin" className="btn-ghost !px-2.5" title="لوحة الإدارة">
-              <ShieldCheck className="h-5 w-5" />
+            <Link to="/admin" className="flex h-10 w-10 items-center justify-center rounded-xl text-plum transition-colors hover:bg-chip" title="لوحة الإدارة" aria-label="لوحة الإدارة">
+              <ShieldCheck className="h-6 w-6" />
             </Link>
           </div>
         </div>
@@ -111,7 +112,7 @@ export default function Layout() {
       </footer>
 
       <nav className="fixed inset-x-0 bottom-0 z-40 border-t border-lilac-dark bg-white/95 pb-[env(safe-area-inset-bottom)] backdrop-blur md:hidden" aria-label="التنقل السفلي">
-        <div className="grid grid-cols-3">
+        <div className="grid grid-cols-4">
           {NAV.map((item) => (
             <NavLink
               key={item.to}
