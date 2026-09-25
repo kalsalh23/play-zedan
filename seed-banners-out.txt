@@ -1,0 +1,3 @@
+seeded banner-1.webp: 201
+seeded banner-2.webp: 201
+seeded banner-3.webp: 201
