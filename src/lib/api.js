@@ -29,7 +29,7 @@ export const api = {
   createOrder: (payload) => request('/api/order', { method: 'POST', body: payload }),
   track: (code) => request('/api/track?code=' + encodeURIComponent(code)),
   storeConfig: () => request('/api/store-config'),
-  adminLogin: (password) => request('/api/admin-login', { method: 'POST', body: { password } }),
+  adminLogin: (email, password) => request('/api/admin-login', { method: 'POST', body: { email, password } }),
   adminOrders: (status = 'all', q = '') => request(`/api/admin-orders?status=${encodeURIComponent(status)}&q=${encodeURIComponent(q)}`),
   adminAction: (payload) => request('/api/admin-action', { method: 'POST', body: payload }),
   adminSettings: () => request('/api/admin-settings'),
