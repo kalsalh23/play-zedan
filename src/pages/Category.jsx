@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { supabase } from '../lib/supabase'
 import MCImageCard, { MCGrid } from '../components/MCImageCard'
 import ProductCard from '../components/ProductCard'
@@ -25,7 +25,6 @@ export function Sliders({ sliders }) {
 
 export default function Category() {
   const { topId } = useParams()
-  const navigate = useNavigate()
   const [cat, setCat] = useState(null)
   const [deps, setDeps] = useState(null)
   const [products, setProducts] = useState(null)
@@ -42,16 +41,6 @@ export default function Category() {
       .eq('top_category_id', Number(topId))
       .then(({ data }) => setProducts(data || []))
   }, [topId])
-
-  // which departments have children (parent-level) vs are leaves (open package sheet)
-  const [parentIds, setParentIds] = useState(new Set())
-  useEffect(() => {
-    supabase.from('departments').select('mc_id,parent_id').then(({ data }) => {
-      const s = new Set()
-      for (const d of data || []) if (d.parent_id) s.add(d.parent_id)
-      setParentIds(s)
-    })
-  }, [])
 
   const all = useMemo(
     () => [...(products || [])].sort((a, b) => b.is_available - a.is_available || a.name.localeCompare(b.name, 'ar')),
@@ -78,18 +67,14 @@ export default function Category() {
         <section>
           <h2 className="mb-3 text-[15px] font-black text-ink">الفئات</h2>
           <MCGrid>
-            {deps.map((d) => {
-              const isParent = parentIds.has(d.mc_id)
-              return (
-                <MCImageCard
-                  key={d.mc_id}
-                  to={isParent ? `/d/${d.mc_id}` : undefined}
-                  img={d.img}
-                  name={d.name}
-                  onClick={isParent ? undefined : () => setSheetDep(d)}
-                />
-              )
-            })}
+            {deps.map((d) => (
+              <MCImageCard
+                key={d.mc_id}
+                img={d.img}
+                name={d.name}
+                onClick={() => setSheetDep(d)}
+              />
+            ))}
           </MCGrid>
         </section>
       )}
