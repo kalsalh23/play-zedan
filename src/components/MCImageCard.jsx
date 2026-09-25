@@ -2,7 +2,7 @@ import { Link } from 'react-router-dom'
 
 // Market-card style image card: image tile + name below (+ optional price)
 // 2 per row on mobile, up to 6 per row on desktop — matches col-6 / col-md-2 grid.
-export default function MCImageCard({ to, img, name, ribbon, price, disabled }) {
+export default function MCImageCard({ to, img, name, ribbon, price, disabled, onClick }) {
   const inner = (
     <>
       <div className="relative overflow-hidden rounded-2xl border border-chip bg-white shadow-[0_3px_14px_rgba(74,31,82,0.07)] transition-all duration-300 group-hover:-translate-y-1 group-hover:shadow-[0_10px_24px_rgba(74,31,82,0.14)] aspect-square">
@@ -26,6 +26,13 @@ export default function MCImageCard({ to, img, name, ribbon, price, disabled }) 
       )}
     </>
   )
+  if (onClick && !disabled) {
+    return (
+      <button onClick={onClick} className="group block w-full text-center">
+        {inner}
+      </button>
+    )
+  }
   if (!to || disabled) return <div className="group cursor-default">{inner}</div>
   return (
     <Link to={to} className="group block">
