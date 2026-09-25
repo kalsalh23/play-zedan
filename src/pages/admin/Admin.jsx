@@ -329,6 +329,7 @@ function SettingsTab() {
 
       <div className="card space-y-4 p-5">
         <h3 className="text-sm font-black text-ink">الأمان</h3>
+        <div><label className="field-label">بريد مالك اللوحة (للتسجيل)</label><input type="email" value={s.admin_email} onChange={set('admin_email')} className="field" dir="ltr" /></div>
         <div><label className="field-label">كلمة مرور جديدة للوحة</label><input type="password" value={newPass} onChange={(e) => setNewPass(e.target.value)} className="field" placeholder="اتركها فارغة لعدم التغيير" /></div>
       </div>
 
@@ -469,7 +470,7 @@ export default function Admin() {
   const [tab, setTab] = useState('orders')
 
   useEffect(() => {
-    if (!getAdminToken()) navigate('/admin')
+    if (!getAdminToken()) navigate('/panel-z7k4a9x2')
   }, [navigate])
 
   return (
@@ -486,7 +487,7 @@ export default function Admin() {
           <div className="flex items-center gap-1">
             <Link to="/" className="btn !px-3 !py-2 text-[11px] font-black text-white/90 hover:bg-white/10">المتجر</Link>
             <button
-              onClick={() => { setAdminToken(''); navigate('/admin') }}
+              onClick={() => { setAdminToken(''); navigate('/panel-z7k4a9x2') }}
               className="btn !px-3 !py-2 text-white/90 hover:bg-white/10"
               title="خروج"
             >
