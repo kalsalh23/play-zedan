@@ -1,0 +1,6 @@
+/categories/3 -> cats=4 products=0
+/categories/4 -> cats=3 products=0
+/categories/110 -> cats=0 products=0
+/categories/62 -> cats=3 products=0
+/categories/166 -> cats=0 products=0
+/categories/35 -> cats=0 products=0
