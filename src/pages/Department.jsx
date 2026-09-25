@@ -7,7 +7,6 @@ import ProductCard from '../components/ProductCard'
 
 export default function Department() {
   const { depId } = useParams()
-  const navigate = useNavigate()
   const [dep, setDep] = useState(null)
   const [children, setChildren] = useState(null)
   const [products, setProducts] = useState(null)
@@ -28,15 +27,6 @@ export default function Department() {
       .eq('department_id', Number(depId))
       .then(({ data }) => setProducts(data || []))
   }, [depId])
-
-  const [parentIds, setParentIds] = useState(new Set())
-  useEffect(() => {
-    supabase.from('departments').select('mc_id,parent_id').then(({ data }) => {
-      const s = new Set()
-      for (const d of data || []) if (d.parent_id) s.add(d.parent_id)
-      setParentIds(s)
-    })
-  }, [])
 
   const sorted = useMemo(() => [...(products || [])].sort((a, b) => b.is_available - a.is_available), [products])
   // hide own products if it has sub-departments (market-card hierarchy: browse through children)
@@ -62,18 +52,14 @@ export default function Department() {
         <section>
           <h2 className="mb-3 text-[15px] font-black text-ink">الفئات</h2>
           <MCGrid>
-            {children.map((c) => {
-              const isParent = parentIds.has(c.mc_id)
-              return (
-                <MCImageCard
-                  key={c.mc_id}
-                  to={isParent ? `/d/${c.mc_id}` : undefined}
-                  img={c.img}
-                  name={c.name}
-                  onClick={isParent ? undefined : () => setSheetDep(c)}
-                />
-              )
-            })}
+            {children.map((c) => (
+              <MCImageCard
+                key={c.mc_id}
+                img={c.img}
+                name={c.name}
+                onClick={() => setSheetDep(c)}
+              />
+            ))}
           </MCGrid>
         </section>
       )}
