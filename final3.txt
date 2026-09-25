@@ -1,0 +1,24 @@
+check 0: product images branded = 200
+check 1: product images branded = 200
+check 2: product images branded = 200
+check 3: product images branded = 200
+check 4: product images branded = 200
+check 5: product images branded = 200
+check 6: product images branded = 200
+check 7: product images branded = 200
+check 8: product images branded = 400
+check 9: product images branded = 400
+check 10: product images branded = 400
+check 11: product images branded = 400
+check 12: product images branded = 400
+check 13: product images branded = 400
+check 14: product images branded = 400
+check 15: product images branded = 400
+check 16: product images branded = 400
+check 17: product images branded = 400
+check 18: product images branded = 400
+check 19: product images branded = 600
+check 20: product images branded = 600
+deploy 0: bundle=Bny1mubs hierarchy=YES
+بوبجي عالمي children: ["حزم بوبجي","اشتراكات بوبجي","شحن عملات wow","شدات بوبجي"]
+RESULT: ALL LIVE ✅
