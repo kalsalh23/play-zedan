@@ -323,6 +323,11 @@ function SettingsTab() {
       </div>
 
       <div className="card space-y-4 p-5">
+        <h3 className="text-sm font-black text-ink">بانرات إعلانات الشاشة الرئيسية</h3>
+        <BannersManager />
+      </div>
+
+      <div className="card space-y-4 p-5">
         <h3 className="text-sm font-black text-ink">الأمان</h3>
         <div><label className="field-label">كلمة مرور جديدة للوحة</label><input type="password" value={newPass} onChange={(e) => setNewPass(e.target.value)} className="field" placeholder="اتركها فارغة لعدم التغيير" /></div>
       </div>
@@ -382,6 +387,79 @@ function BalanceTab() {
           </div>
         )}
       </div>
+    </div>
+  )
+}
+
+function BannersManager() {
+  const [list, setList] = useState(null)
+  const [link, setLink] = useState('/categories')
+  const [busy, setBusy] = useState(false)
+  const fileRef = useRef(null)
+
+  const load = useCallback(() => {
+    api.banners().then((r) => setList(r.banners || [])).catch((e) => toast.error(e.message))
+  }, [])
+  useEffect(load, [load])
+
+  async function upload() {
+    const file = fileRef.current && fileRef.current.files && fileRef.current.files[0]
+    if (!file) return toast.error('اختر صورة أولاً')
+    if (file.size > 3.5 * 1024 * 1024) return toast.error('حجم الصورة كبير (الحد 3.5MB)')
+    setBusy(true)
+    try {
+      const b64 = await new Promise((resolve, reject) => {
+        const r = new FileReader()
+        r.onload = () => resolve(String(r.result).split(',')[1])
+        r.onerror = reject
+        r.readAsDataURL(file)
+      })
+      const r = await api.adminBanners({ action: 'add', image_b64: b64, link })
+      toast.success(r.message)
+      if (fileRef.current) fileRef.current.value = ''
+      load()
+    } catch (e) {
+      toast.error(e.message)
+    } finally {
+      setBusy(false)
+    }
+  }
+
+  async function del(id) {
+    if (!window.confirm('حذف هذا البانر؟')) return
+    try {
+      const r = await api.adminBanners({ action: 'delete', id })
+      toast.success(r.message)
+      load()
+    } catch (e) { toast.error(e.message) }
+  }
+
+  return (
+    <div className="space-y-3">
+      <div className="flex flex-wrap items-center gap-2">
+        <input ref={fileRef} type="file" accept="image/*" className="field !py-2 !text-xs flex-1 min-w-[180px]" />
+        <input value={link} onChange={(e) => setLink(e.target.value)} placeholder="رابط البانر" className="field !py-2 !text-xs w-36" dir="ltr" />
+        <button onClick={upload} disabled={busy} className="btn-gradient btn-sm shrink-0">
+          {busy ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : 'إضافة بانر'}
+        </button>
+      </div>
+      <p className="text-[10px] font-bold text-smoke">يفضّل صورة عريضة (مثال 1200×420) — تُعرض بالتناوب أعلى الشاشة الرئيسية</p>
+      {!list ? (
+        <div className="skeleton h-20" />
+      ) : list.length === 0 ? (
+        <p className="text-xs font-bold text-smoke">لا توجد بانرات — تُعرض البانرات الافتراضية النصية بدلاً منها</p>
+      ) : (
+        <div className="space-y-2">
+          {list.map((b, i) => (
+            <div key={b.id} className="flex items-center gap-3 rounded-2xl border-2 border-chip p-2">
+              <span className="grid h-7 w-7 shrink-0 place-items-center rounded-lg bg-chip text-[11px] font-black text-plum">{i + 1}</span>
+              <img src={b.img} alt="" className="h-12 flex-1 rounded-xl object-cover" />
+              <span className="shrink-0 text-[10px] font-bold text-smoke" dir="ltr">{b.link}</span>
+              <button onClick={() => del(b.id)} className="btn btn-sm !px-2.5 !py-1.5 !text-[10px] !bg-rose/10 !text-rose hover:!bg-rose hover:!text-white shrink-0">حذف</button>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   )
 }
