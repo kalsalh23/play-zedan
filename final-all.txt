@@ -1,0 +1,23 @@
+check 0: departments=116 t3-branded=56
+check 1: departments=116 t3-branded=64
+check 2: departments=116 t3-branded=72
+check 3: departments=116 t3-branded=77
+check 4: departments=116 t3-branded=82
+check 5: departments=116 t3-branded=86
+check 6: departments=116 t3-branded=86
+check 7: departments=116 t3-branded=86
+check 8: departments=116 t3-branded=86
+check 9: departments=116 t3-branded=86
+check 10: departments=116 t3-branded=86
+check 11: departments=116 t3-branded=86
+check 12: departments=116 t3-branded=86
+check 13: departments=116 t3-branded=86
+check 14: departments=116 t3-branded=86
+check 15: departments=116 t3-branded=86
+check 16: departments=116 t3-branded=86
+check 17: departments=116 t3-branded=86
+check 18: departments=116 t3-branded=86
+check 19: departments=116 t3-branded=86
+deploy check 0: bundle=BgS2PFW4 hero+slider-fix=YES
+شدات بوبجي img: branded ✓
+TOTAL: departments=116 | priced products=558
