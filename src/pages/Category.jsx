@@ -28,7 +28,7 @@ export default function Category() {
   const [cat, setCat] = useState(null)
   const [deps, setDeps] = useState(null)
   const [products, setProducts] = useState(null)
-  const [sheetDep, setSheetDep] = useState(null)
+  const [sheet, setSheet] = useState(null)
 
   useEffect(() => {
     setCat(null); setDeps(null); setProducts(null); setSheetDep(null)
@@ -72,7 +72,7 @@ export default function Category() {
                 key={d.mc_id}
                 img={d.img}
                 name={d.name}
-                onClick={() => setSheetDep(d)}
+                onClick={() => setSheet({ dep: d })}
               />
             ))}
           </MCGrid>
@@ -83,7 +83,13 @@ export default function Category() {
         <section>
           <h2 className="mb-3 text-[15px] font-black text-ink">الخدمات</h2>
           <MCGrid>
-            {all.map((p) => <ProductCard key={p.mc_id} p={p} />)}
+            {all.map((p) => (
+              <ProductCard
+                key={p.mc_id}
+                p={p}
+                onBuy={(prod) => setSheet({ dep: { mc_id: prod.department_id, name: prod.department_name, img: prod.img }, preselect: prod.mc_id })}
+              />
+            ))}
           </MCGrid>
         </section>
       )}
@@ -94,7 +100,7 @@ export default function Category() {
         <div className="card p-8 text-center text-xs font-bold text-smoke">لا توجد خدمات في هذا القسم حالياً</div>
       )}
 
-      {sheetDep && <PackageSheet dep={sheetDep} onClose={() => setSheetDep(null)} />}
+      {sheet && <PackageSheet dep={sheet.dep} preselect={sheet.preselect} onClose={() => setSheet(null)} />}
     </div>
   )
 }
