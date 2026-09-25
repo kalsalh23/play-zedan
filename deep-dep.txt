@@ -1,8 +1,0 @@
-DB بوبجي products: 22
-  dep 2|بوبجي تركي 🇹🇷 -> 6
-  dep 273|اشتراكات بوبجي -> 6
-  dep 1|بوبجي لايت -> 4
-  dep 268|شدات بوبجي -> 6
-/departments/3 keys: products,user
-  categories: []
-  products: 0
