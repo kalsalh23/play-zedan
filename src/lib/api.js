@@ -37,4 +37,6 @@ export const api = {
   adminSync: () => request('/api/admin-sync', { method: 'POST', body: {} }),
   adminBalance: () => request('/api/admin-balance'),
   adminProduct: (payload) => request('/api/admin-product', { method: 'POST', body: payload }),
+  adminBanners: (payload) => request('/api/admin-banners', { method: 'POST', body: payload }),
+  banners: () => request('/api/banners'),
 }
