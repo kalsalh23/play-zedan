@@ -53,6 +53,10 @@ export default {
           '0%, 100%': { transform: 'translateY(0)' },
           '50%': { transform: 'translateY(-10px)' },
         },
+        'slide-up': {
+          '0%': { transform: 'translateY(100%)' },
+          '100%': { transform: 'translateY(0)' },
+        },
       },
       animation: {
         'fade-up': 'fade-up .6s cubic-bezier(.22,.61,.36,1) both',
@@ -60,6 +64,7 @@ export default {
         shimmer: 'shimmer 1.6s linear infinite',
         pop: 'pop .4s ease',
         float: 'float 4s ease-in-out infinite',
+        'slide-up': 'slide-up .35s cubic-bezier(.22,.61,.36,1) both',
       },
     },
   },
