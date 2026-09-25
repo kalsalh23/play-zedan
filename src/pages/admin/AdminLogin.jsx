@@ -1,10 +1,13 @@
 import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import toast from 'react-hot-toast'
-import { Gamepad2, Loader2, LockKeyhole, ArrowRight } from 'lucide-react'
+import { Gamepad2, Loader2, LockKeyhole, ArrowRight, Mail } from 'lucide-react'
 import { api, setAdminToken, getAdminToken } from '../../lib/api'
 
+const PANEL = '/panel-z7k4a9x2'
+
 export default function AdminLogin() {
+  const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
@@ -13,10 +16,10 @@ export default function AdminLogin() {
     e.preventDefault()
     setLoading(true)
     try {
-      const { token } = await api.adminLogin(password)
+      const { token } = await api.adminLogin(email, password)
       setAdminToken(token)
       toast.success('مرحباً أيمن 👋')
-      navigate('/admin/dashboard')
+      navigate(PANEL + '/dashboard')
     } catch (e2) {
       toast.error(e2.message)
     } finally {
@@ -29,7 +32,7 @@ export default function AdminLogin() {
       <div className="grid min-h-screen place-items-center p-4">
         <div className="card w-full max-w-sm p-8 text-center">
           <h1 className="text-lg font-black text-ink">أنت مسجل الدخول بالفعل</h1>
-          <button onClick={() => navigate('/admin/dashboard')} className="btn-primary mt-4 w-full">فتح لوحة التحكم</button>
+          <button onClick={() => navigate(PANEL + '/dashboard')} className="btn-primary mt-4 w-full">فتح لوحة التحكم</button>
           <Link to="/" className="btn-ghost mt-2 w-full text-xs">العودة للمتجر</Link>
         </div>
       </div>
@@ -43,22 +46,40 @@ export default function AdminLogin() {
           <Gamepad2 className="h-8 w-8" />
         </div>
         <h1 className="text-lg font-black text-plum">لوحة إدارة MOBILY BRO+</h1>
-        <p className="mt-1 text-[11px] font-bold text-smoke">الدخول مخصص لإدارة المتجر — أيمن زيدان</p>
-        <div className="mt-6 text-right">
-          <label className="field-label">كلمة المرور</label>
-          <div className="relative">
-            <LockKeyhole className="absolute right-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-smoke" />
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              placeholder="••••••••••"
-              className="field !pr-10"
-              autoFocus
-            />
+        <p className="mt-1 text-[11px] font-bold text-smoke">دخول المالك — بحساب التسجيل المعتمد</p>
+        <div className="mt-6 space-y-4 text-right">
+          <div>
+            <label className="field-label">البريد الإلكتروني</label>
+            <div className="relative">
+              <Mail className="absolute right-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-smoke" />
+              <input
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="owner@example.com"
+                className="field !pr-10"
+                dir="ltr"
+                autoComplete="username"
+                autoFocus
+              />
+            </div>
+          </div>
+          <div>
+            <label className="field-label">كلمة المرور</label>
+            <div className="relative">
+              <LockKeyhole className="absolute right-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-smoke" />
+              <input
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="••••••••••"
+                className="field !pr-10"
+                autoComplete="current-password"
+              />
+            </div>
           </div>
         </div>
-        <button type="submit" disabled={loading || !password} className="btn-gradient mt-4 w-full">
+        <button type="submit" disabled={loading || !email || !password} className="btn-gradient mt-4 w-full">
           {loading ? <Loader2 className="h-4 w-4 animate-spin" /> : 'دخول'}
         </button>
         <Link to="/" className="mt-4 inline-flex items-center gap-1 text-[11px] font-black text-smoke hover:text-plum">
