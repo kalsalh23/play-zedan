@@ -24,6 +24,8 @@ export default function Home() {
   const [cats, setCats] = useState(null)
   const [products, setProducts] = useState(null)
   const [hero, setHero] = useState(DEFAULT_HERO)
+  const [banners, setBanners] = useState(null)
+  const [slide, setSlide] = useState(0)
   const [code, setCode] = useState('')
   const navigate = useNavigate()
 
@@ -34,6 +36,7 @@ export default function Home() {
       .select('mc_id,name,img,is_available,sell_unit_price,max_qty,min_qty,department_name,top_category_name')
       .eq('is_hidden', false)
       .then(({ data }) => setProducts(data || []))
+    supabase.from('banners').select('id,img,link,title').order('sort').then(({ data }) => setBanners(data || []))
     api.storeConfig().then((r) => {
       const c = r.config || {}
       setHero({
@@ -46,36 +49,95 @@ export default function Home() {
     }).catch(() => {})
   }, [])
 
+  // auto-advance hero slider
+  useEffect(() => {
+    if (!banners || banners.length < 2) return
+    const t = setInterval(() => {
+      setSlide((s) => {
+        const next = (s + 1) % banners.length
+        const el = document.getElementById('hero-track')
+        if (el) el.scrollTo({ left: next * el.clientWidth, behavior: 'smooth' })
+        return next
+      })
+    }, 4500)
+    return () => clearInterval(t)
+  }, [banners])
+
   const featured = useMemo(() => (products || []).filter((p) => p.is_available && Number(p.sell_unit_price) > 0).slice(0, 12), [products])
 
   return (
     <div className="container-app space-y-7">
-      {/* Offers hero — compact rectangular banner */}
-      <section className="hero-gradient relative overflow-hidden rounded-4xl p-5 text-white shadow-lg shadow-plum/25 sm:p-7">
-        <div className="absolute -left-12 -top-12 h-36 w-36 rounded-full bg-white/10 blur-2xl" aria-hidden />
-        <div className="absolute -bottom-16 -right-10 h-40 w-40 rounded-full bg-gold/25 blur-3xl" aria-hidden />
-        <span className="pointer-events-none absolute -left-2 top-1/2 hidden -translate-y-1/2 select-none text-[120px] font-black leading-none text-white/10 sm:block" aria-hidden>%</span>
-        <div className="relative max-w-xl">
-          <span className="inline-flex items-center gap-1.5 rounded-full bg-gold px-3 py-1 text-[10px] font-black text-plum-dark shadow-md shadow-gold/30">
-            <Flame className="h-3 w-3" /> {hero.hero_badge}
-          </span>
-          <h1 className="mt-2.5 text-xl font-black leading-snug sm:text-2xl">{hero.hero_title}</h1>
-          <p className="mt-1.5 text-[11px] font-bold leading-5 text-white/85 sm:text-xs">{hero.hero_subtitle}</p>
-          <div className="mt-3.5 flex flex-wrap items-center gap-2">
-            <Link to={hero.hero_link || '/categories'} className="btn-gold btn-sm !px-5 !py-2.5 !text-xs">
-              {hero.hero_btn} <ChevronLeft className="h-3.5 w-3.5" />
-            </Link>
-            <Link to="/track" className="btn btn-sm !bg-white/15 !px-4 !py-2.5 !text-xs text-white backdrop-blur hover:!bg-white/25">
-              <PackageSearch className="h-3.5 w-3.5" /> تتبع طلبك
-            </Link>
+      {/* Hero — ad banners slider (falls back to text banner) */}
+      {banners && banners.length > 0 ? (
+        <section className="relative overflow-hidden rounded-4xl shadow-lg shadow-plum/20">
+          <div
+            id="hero-track"
+            className="flex snap-x snap-mandatory overflow-x-auto no-scrollbar"
+            onScroll={(e) => {
+              const el = e.currentTarget
+              const idx = Math.round(el.scrollLeft / Math.max(el.clientWidth, 1))
+              if (idx !== slide) setSlide(idx)
+            }}
+          >
+            {banners.map((b, i) => (
+              <Link
+                key={b.id}
+                to={b.link || '/categories'}
+                onFocus={() => setSlide(i)}
+                className="block w-full min-w-full snap-start"
+              >
+                <img
+                  src={b.img}
+                  alt={b.title || 'إعلان'}
+                  className={`h-40 w-full object-cover transition-opacity duration-500 sm:h-52 ${i === slide ? 'opacity-100' : 'opacity-60'}`}
+                />
+              </Link>
+            ))}
           </div>
-          <div className="mt-3.5 flex flex-wrap gap-x-4 gap-y-1 text-[9px] font-black text-white/70">
-            <span className="flex items-center gap-1"><ShieldCheck className="h-3 w-3 text-gold" /> دفع آمن عبر شام كاش</span>
-            <span className="flex items-center gap-1"><Zap className="h-3 w-3 text-gold" /> تنفيذ آلي فوري</span>
-            <span className="flex items-center gap-1"><Headphones className="h-3 w-3 text-gold" /> دعم مباشر</span>
+          {banners.length > 1 && (
+            <div className="absolute bottom-2.5 left-1/2 flex -translate-x-1/2 gap-1.5">
+              {banners.map((b, i) => (
+                <button
+                  key={b.id}
+                  onClick={() => {
+                    setSlide(i)
+                    const el = document.getElementById('hero-track')
+                    if (el) el.scrollTo({ left: i * el.clientWidth, behavior: 'smooth' })
+                  }}
+                  aria-label={'إعلان ' + (i + 1)}
+                  className={`h-2 rounded-full transition-all ${i === slide ? 'w-6 bg-gold' : 'w-2 bg-white/70'}`}
+                />
+              ))}
+            </div>
+          )}
+        </section>
+      ) : (
+        <section className="hero-gradient relative overflow-hidden rounded-4xl p-5 text-white shadow-lg shadow-plum/25 sm:p-7">
+          <div className="absolute -left-12 -top-12 h-36 w-36 rounded-full bg-white/10 blur-2xl" aria-hidden />
+          <div className="absolute -bottom-16 -right-10 h-40 w-40 rounded-full bg-gold/25 blur-3xl" aria-hidden />
+          <span className="pointer-events-none absolute -left-2 top-1/2 hidden -translate-y-1/2 select-none text-[120px] font-black leading-none text-white/10 sm:block" aria-hidden>%</span>
+          <div className="relative max-w-xl">
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-gold px-3 py-1 text-[10px] font-black text-plum-dark shadow-md shadow-gold/30">
+              <Flame className="h-3 w-3" /> {hero.hero_badge}
+            </span>
+            <h1 className="mt-2.5 text-xl font-black leading-snug sm:text-2xl">{hero.hero_title}</h1>
+            <p className="mt-1.5 text-[11px] font-bold leading-5 text-white/85 sm:text-xs">{hero.hero_subtitle}</p>
+            <div className="mt-3.5 flex flex-wrap items-center gap-2">
+              <Link to={hero.hero_link || '/categories'} className="btn-gold btn-sm !px-5 !py-2.5 !text-xs">
+                {hero.hero_btn} <ChevronLeft className="h-3.5 w-3.5" />
+              </Link>
+              <Link to="/track" className="btn btn-sm !bg-white/15 !px-4 !py-2.5 !text-xs text-white backdrop-blur hover:!bg-white/25">
+                <PackageSearch className="h-3.5 w-3.5" /> تتبع طلبك
+              </Link>
+            </div>
+            <div className="mt-3.5 flex flex-wrap gap-x-4 gap-y-1 text-[9px] font-black text-white/70">
+              <span className="flex items-center gap-1"><ShieldCheck className="h-3 w-3 text-gold" /> دفع آمن عبر شام كاش</span>
+              <span className="flex items-center gap-1"><Zap className="h-3 w-3 text-gold" /> تنفيذ آلي فوري</span>
+              <span className="flex items-center gap-1"><Headphones className="h-3 w-3 text-gold" /> دعم مباشر</span>
+            </div>
           </div>
-        </div>
-      </section>
+        </section>
+      )}
 
       {/* Quick track */}
       <section>
