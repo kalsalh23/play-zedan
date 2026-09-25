@@ -89,7 +89,7 @@ export default function Home() {
                 <img
                   src={b.img}
                   alt={b.title || 'إعلان'}
-                  className={`h-40 w-full object-cover transition-opacity duration-500 sm:h-52 ${i === slide ? 'opacity-100' : 'opacity-60'}`}
+                  className="h-40 w-full object-cover sm:h-52"
                 />
               </Link>
             ))}
