@@ -1,0 +1,3 @@
+0: bundle=CgmUDC7H banner-slider=YES
+banners API: 200 count=3
+RESULT: AD SLIDER LIVE ✅
