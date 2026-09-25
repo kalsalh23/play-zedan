@@ -1,0 +1,5 @@
+products with images: 799 | to brand: 799
+progress: 200 branded, 0 failed
+progress: 400 branded, 0 failed
+progress: 600 branded, 0 failed
+DONE: branded=799 failed=0
